@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Royale – Smart Hotel Booking System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind CSS theme extensions
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FDFBF7',
+                            100: '#F9F5EC',
+                            200: '#EFE3CE',
+                            300: '#E4CFAC',
+                            400: '#D5B783',
+                            500: '#C5A059', // Primary brand gold
+                            600: '#A6833E',
+                            700: '#7F642E',
+                            800: '#5A4621',
+                            900: '#3A2D15',
+                        },
+                        navy: {
+                            900: '#0B1325',
+                            800: '#141E33',
+                            700: '#1E2C4A',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#FAF9F6] text-gray-800 font-sans antialiased selection:bg-gold-500 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-navy-900 text-gray-300 text-xs tracking-wider border-b border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                <span class="text-gray-300">Spring Oasis Sale: Up to 25% off 3+ night bookings with code <strong class="text-gold-400">ROYALE25</strong></span>
+            </div>
+            <div class="flex items-center space-x-6 text-gray-400">
+                <span class="flex items-center gap-1.5 hover:text-gold-400 transition cursor-pointer">
+                    <i data-lucide="phone" class="w-3.5 h-3.5 text-gold-400"></i> +91 93986 48195
+                </span>
+                <span class="flex items-center gap-1.5 hover:text-gold-400 transition cursor-pointer">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-400"></i> Goa, Maldives &amp; Monaco
+                </span>
+                <select id="currencySelector" class="bg-transparent text-gray-300 hover:text-white border-0 text-xs focus:ring-0 cursor-pointer">
+                    <option value="INR" selected class="bg-navy-900 text-white">INR (₹)</option>
+                    <option value="USD" class="bg-navy-900 text-white">USD ($)</option>
+                    <option value="EUR" class="bg-navy-900 text-white">EUR (€)</option>
+                    <option value="GBP" class="bg-navy-900 text-white">GBP (£)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header id="mainHeader" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md transition-all duration-300 border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-full border border-gold-400 flex items-center justify-center bg-gold-50 group-hover:bg-gold-500 transition duration-300">
+                    <i data-lucide="crown" class="w-5 h-5 text-gold-600 group-hover:text-white transition duration-300"></i>
+                </div>
+                <div>
+                    <span class="font-serif text-2xl font-bold tracking-wider text-navy-900 uppercase block leading-none">Grand Royale</span>
+                    <span class="text-[9px] tracking-widest text-gold-600 uppercase font-semibold block mt-0.5">Smart Hotel Booking System</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium tracking-wide">
+                <a href="#rooms" class="text-gray-700 hover:text-gold-600 transition">Suites &amp; Villas</a>
+                <a href="#experiences" class="text-gray-700 hover:text-gold-600 transition">Experiences</a>
+                <a href="#amenities" class="text-gray-700 hover:text-gold-600 transition">Amenities</a>
+                <a href="#dining" class="text-gray-700 hover:text-gold-600 transition">Dining</a>
+                <a href="#reviews" class="text-gray-700 hover:text-gold-600 transition">Guest Reviews</a>
+                <a href="#faq" class="text-gray-700 hover:text-gold-600 transition">FAQ</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden sm:flex items-center space-x-3">
+                <!-- Logged Out: Sign In Button -->
+                <button type="button" id="openAuthModalBtn" class="flex items-center space-x-2 text-xs font-semibold text-navy-900 hover:text-gold-600 px-3.5 py-2 rounded-full border border-gray-200 hover:border-gold-400 bg-white shadow-sm transition">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-gold-600"></i>
+                    <span>Sign In</span>
+                </button>
+
+                <!-- Logged In: User Profile Menu (hidden by default) -->
+                <div id="userProfileContainer" class="hidden relative">
+                    <button type="button" id="userProfileBtn" class="flex items-center space-x-2 text-xs font-semibold text-navy-900 px-3 py-1.5 rounded-full border border-gold-300 bg-gold-50/70 hover:bg-gold-100/60 transition">
+                        <div id="userAvatar" class="w-6 h-6 rounded-full bg-gold-500 text-white flex items-center justify-center font-bold text-[10px]">
+                            U
+                        </div>
+                        <span id="userDisplayName" class="max-w-[100px] truncate">Guest</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-gray-500"></i>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="userProfileDropdown" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                        <div class="px-4 py-2 border-b border-gray-100">
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Signed In As</p>
+                            <p id="userDropdownIdentifier" class="text-xs font-bold text-navy-900 truncate">user@example.com</p>
+                            <span class="inline-block mt-1 bg-gold-50 text-gold-700 text-[10px] font-bold px-2 py-0.5 rounded border border-gold-200">
+                                Grand Royale Society Member
+                            </span>
+                        </div>
+                        <button type="button" id="profileMyTripsBtn" class="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gold-50 hover:text-gold-700 flex items-center gap-2 transition">
+                            <i data-lucide="bookmark-check" class="w-4 h-4 text-gold-600"></i>
+                            <span>My Reservations</span>
+                        </button>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <button type="button" id="logoutBtn" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 transition">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" id="viewMyBookingsBtn" class="flex items-center space-x-2 text-xs font-medium text-navy-900 hover:text-gold-600 px-3 py-2 transition relative">
+                    <i data-lucide="bookmark-check" class="w-4 h-4"></i>
+                    <span>My Trips</span>
+                    <span id="bookingCountBadge" class="hidden absolute -top-1 -right-1 bg-gold-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                </button>
+                <a href="/admin" target="_blank" class="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 hover:text-gold-600 px-3 py-1.5 rounded-full border border-gray-300 hover:border-gold-500 bg-white shadow-sm transition" title="Hotel Management &amp; Admin Portal">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-gold-600"></i>
+                    <span>Admin Portal</span>
+                </a>
+                <a href="#rooms" class="bg-navy-900 hover:bg-gold-600 text-white text-xs font-semibold px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                    <span>Reserve Now</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button type="button" id="mobileMenuToggle" class="lg:hidden p-2 text-navy-900 hover:text-gold-600 focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 px-6 py-4 shadow-xl space-y-4">
+            <a href="#rooms" class="block text-gray-700 hover:text-gold-600 font-medium py-1">Suites &amp; Villas</a>
+            <a href="#experiences" class="block text-gray-700 hover:text-gold-600 font-medium py-1">Experiences</a>
+            <a href="#amenities" class="block text-gray-700 hover:text-gold-600 font-medium py-1">Amenities</a>
+            <a href="#dining" class="block text-gray-700 hover:text-gold-600 font-medium py-1">Dining</a>
+            <a href="#reviews" class="block text-gray-700 hover:text-gold-600 font-medium py-1">Reviews</a>
+            <a href="#faq" class="block text-gray-700 hover:text-gold-600 font-medium py-1">FAQ</a>
+            <div class="pt-4 border-t border-gray-100 flex flex-col gap-3">
+                <button type="button" id="mobileAuthBtn" class="w-full text-center py-2.5 border border-gold-400 bg-gold-50 text-gold-800 rounded-lg font-semibold text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4 text-gold-600"></i>
+                    <span id="mobileAuthLabel">Sign In with OTP</span>
+                </button>
+                <button type="button" id="mobileMyBookingsBtn" class="w-full text-center py-2.5 border border-navy-900 text-navy-900 rounded-lg font-medium text-sm">
+                    View Saved Bookings
+                </button>
+                <a href="#rooms" class="w-full text-center py-2.5 bg-navy-900 text-white rounded-lg font-medium text-sm">
+                    Reserve A Room
+                </a>
+                <a href="/admin" target="_blank" class="w-full text-center py-2.5 border border-dashed border-gold-400 text-gold-700 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 bg-gold-50/50">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-gold-600"></i>
+                    <span>Executive Admin Portal</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[90vh] flex items-center justify-center bg-navy-900 text-white overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&amp;fit=crop&amp;w=2000&amp;q=80" 
+                 alt="Luxury Grand Royale Resort &amp; Villas" 
+                 class="w-full h-full object-cover object-center filter brightness-60 scale-105 transform animate-slow-zoom">
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/40 to-black/60"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-8 pb-36">
+            <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 mb-6">
+                <i data-lucide="sparkles" class="w-4 h-4 text-gold-400"></i>
+                <span class="text-xs uppercase tracking-widest text-gold-300 font-semibold">Awarded World's Best Luxury Resort 2026</span>
+            </div>
+            
+            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Where Timeless Elegance <br>
+                <span class="italic font-normal text-gold-300">Meets Pure Sanctuary</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed mb-8">
+                Immerse yourself in handcrafted beachfront villas, Michelin-starred gastronomic experiences, and bespoke 24-hour butler service.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 text-sm font-medium">
+                <a href="#rooms" class="bg-gold-500 hover:bg-gold-600 text-navy-900 hover:text-white px-8 py-3.5 rounded-full font-bold shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <span>Explore Available Rooms</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                <a href="#experiences" class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/30 px-8 py-3.5 rounded-full font-semibold transition-all duration-300 flex items-center gap-2">
+                    <i data-lucide="compass" class="w-4 h-4 text-gold-400"></i>
+                    <span>Discover Experiences</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Quick Search &amp; Booking Bar -->
+        <div class="absolute -bottom-1 sm:bottom-6 left-0 right-0 z-20 max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-6 text-gray-800">
+                <form id="heroBookingForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                    
+                    <!-- Destination / Resort Selection -->
+                    <div class="relative border-b md:border-b-0 md:border-r border-gray-200 pb-3 md:pb-0 md:pr-4">
+                        <label class="block text-xs uppercase font-bold text-gray-500 tracking-wider mb-1 flex items-center gap-1.5">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-600"></i> Destination
+                        </label>
+                        <select id="searchLocation" class="w-full bg-transparent font-medium text-navy-900 text-sm focus:outline-none cursor-pointer">
+                            <option value="all">All Locations (Goa, Jaipur, Maldives &amp; Monaco)</option>
+                            <option value="goa">Grand Royale Emerald Sands - Goa, India</option>
+                            <option value="jaipur">Grand Royale Royal Haveli - Jaipur, India</option>
+                            <option value="maldives">Grand Royale Pearl Haven - Maldives</option>
+                            <option value="monaco">Grand Royale Riviera Palace - Monaco</option>
+                            <option value="santorini">Grand Royale Caldera Suites - Santorini</option>
+                        </select>
+                    </div>
+
+                    <!-- Check-in &amp; Check-out Dates -->
+                    <div class="relative border-b md:border-b-0 md:border-r border-gray-200 pb-3 md:pb-0 md:px-4">
+                        <label class="block text-xs uppercase font-bold text-gray-500 tracking-wider mb-1 flex items-center gap-1.5">
+                            <i data-lucide="calendar-range" class="w-3.5 h-3.5 text-gold-600"></i> Check In — Out
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" id="checkInDate" class="w-full text-xs sm:text-sm font-semibold text-navy-900 bg-transparent focus:outline-none cursor-pointer">
+                            <input type="date" id="checkOutDate" class="w-full text-xs sm:text-sm font-semibold text-navy-900 bg-transparent focus:outline-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Guests &amp; Room Count Selector -->
+                    <div class="relative border-b md:border-b-0 md:border-r border-gray-200 pb-3 md:pb-0 md:px-4">
+                        <label class="block text-xs uppercase font-bold text-gray-500 tracking-wider mb-1 flex items-center gap-1.5">
+                            <i data-lucide="users" class="w-3.5 h-3.5 text-gold-600"></i> Guests &amp; Rooms
+                        </label>
+                        <button type="button" id="guestDropdownTrigger" class="w-full text-left font-semibold text-navy-900 text-sm flex items-center justify-between">
+                            <span id="guestSummaryText">2 Adults · 1 Room</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                        </button>
+
+                        <!-- Guest Dropdown Menu -->
+                        <div id="guestDropdownMenu" class="hidden absolute top-full left-0 mt-3 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 z-50">
+                            <!-- Adults -->
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-semibold text-sm text-navy-900">Adults</p>
+                                    <p class="text-xs text-gray-400">Ages 13 and above</p>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="adults" data-delta="-1">-</button>
+                                    <span id="adultCount" class="font-bold text-sm w-4 text-center">2</span>
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="adults" data-delta="1">+</button>
+                                </div>
+                            </div>
+                            <!-- Children -->
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-semibold text-sm text-navy-900">Children</p>
+                                    <p class="text-xs text-gray-400">Ages 0 to 12</p>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="children" data-delta="-1">-</button>
+                                    <span id="childrenCount" class="font-bold text-sm w-4 text-center">0</span>
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="children" data-delta="1">+</button>
+                                </div>
+                            </div>
+                            <!-- Rooms -->
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="font-semibold text-sm text-navy-900">Rooms</p>
+                                    <p class="text-xs text-gray-400">Total suites requested</p>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="rooms" data-delta="-1">-</button>
+                                    <span id="roomCount" class="font-bold text-sm w-4 text-center">1</span>
+                                    <button type="button" class="counter-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:border-gold-500" data-type="rooms" data-delta="1">+</button>
+                                </div>
+                            </div>
+                            <button type="button" id="closeGuestDropdown" class="mt-3 w-full bg-navy-900 hover:bg-gold-600 text-white text-xs font-bold py-2 rounded-lg transition">Apply Guests</button>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="flex items-center justify-center md:pl-2">
+                        <button type="submit" class="w-full bg-navy-900 hover:bg-gold-600 text-white py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+                            <i data-lucide="search" class="w-4 h-4 group-hover:scale-110 transition"></i>
+                            <span>Check Availability</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Highlights Banner -->
+    <section class="mt-28 sm:mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mb-3">
+                    <i data-lucide="utensils" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-serif font-bold text-navy-900 text-base">Michelin Dining</h4>
+                <p class="text-xs text-gray-500 mt-1">3 signature culinary venues</p>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mb-3">
+                    <i data-lucide="waves" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-serif font-bold text-navy-900 text-base">Private Infinity Beach</h4>
+                <p class="text-xs text-gray-500 mt-1">Secluded turquoise waters</p>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mb-3">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-serif font-bold text-navy-900 text-base">Free Cancellation</h4>
+                <p class="text-xs text-gray-500 mt-1">Up to 48 hrs before check-in</p>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mb-3">
+                    <i data-lucide="sparkle" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-serif font-bold text-navy-900 text-base">24/7 Butler Service</h4>
+                <p class="text-xs text-gray-500 mt-1">Bespoke concierge for every guest</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suites &amp; Villas Catalog Section -->
+    <section id="rooms" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+            <div>
+                <span class="text-xs uppercase tracking-widest text-gold-600 font-bold">Accommodations</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-navy-900 mt-1">Rooms, Suites &amp; Villas</h2>
+                <p class="text-gray-600 text-sm sm:text-base mt-2 max-w-xl">
+                    Every sanctuary is designed with bespoke Italian marble, private terraces, custom Egyptian cotton linens, and panoramic ocean vistas.
+                </p>
+            </div>
+            <!-- Live Active Filter Info -->
+            <div id="filterNightsNotice" class="mt-4 md:mt-0 text-sm bg-gold-50 border border-gold-200 text-gold-900 px-4 py-2 rounded-xl flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 text-gold-600"></i>
+                <span id="activeBookingNightsText">Pricing calculated for <strong>3 nights</strong></span>
+            </div>
+        </div>
+
+        <!-- Interactive Category &amp; Budget Filter Section -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-200 mb-8 space-y-6">
+            
+            <!-- Row 1: Category Filter Pills -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs uppercase font-bold text-gray-500 tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="layers" class="w-4 h-4 text-gold-600"></i> Accommodation Category
+                    </span>
+                    <span class="text-[11px] text-gray-400">Choose your preferred stay style</span>
+                </div>
+                <div class="flex flex-wrap gap-2" id="categoryFilterContainer">
+                    <button type="button" class="room-filter-pill active px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-navy-900 text-white" data-category="all">
+                        All Accommodations
+                    </button>
+                    <button type="button" class="room-filter-pill px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200" data-category="economy">
+                        🟢 Budget &amp; Economy
+                    </button>
+                    <button type="button" class="room-filter-pill px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200" data-category="executive">
+                        🔵 Executive Club Suites
+                    </button>
+                    <button type="button" class="room-filter-pill px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200" data-category="suite">
+                        🟣 Luxury Signature Suites
+                    </button>
+                    <button type="button" class="room-filter-pill px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200" data-category="villa">
+                        Water &amp; Beach Villas
+                    </button>
+                    <button type="button" class="room-filter-pill px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition bg-white text-gray-600 hover:bg-gray-100 border border-gray-200" data-category="penthouse">
+                        👑 Royal Penthouse
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-100 pt-5">
+                <!-- Row 2: Budget Tiers, Slider &amp; Sorting Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    
+                    <!-- Quick Budget Tiers (Col 6) -->
+                    <div class="lg:col-span-6 space-y-2">
+                        <label class="block text-xs uppercase font-bold text-gray-500 tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="wallet" class="w-4 h-4 text-emerald-600"></i> Select Your Budget Tier
+                        </label>
+                        <div class="flex flex-wrap gap-1.5" id="budgetTierContainer">
+                            <button type="button" class="budget-tier-pill active px-3 py-1.5 rounded-xl text-xs font-bold transition bg-gold-600 text-white border border-gold-600 shadow-sm" data-budget-tier="all">
+                                All Budgets
+                            </button>
+                            <button type="button" class="budget-tier-pill px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white text-gray-700 hover:bg-emerald-50 border border-gray-200" data-budget-tier="budget">
+                                🟢 Under ₹5,000 (Budget)
+                            </button>
+                            <button type="button" class="budget-tier-pill px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white text-gray-700 hover:bg-blue-50 border border-gray-200" data-budget-tier="mid">
+                                🔵 ₹5,000 – ₹15,000 (Executive)
+                            </button>
+                            <button type="button" class="budget-tier-pill px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white text-gray-700 hover:bg-purple-50 border border-gray-200" data-budget-tier="luxury">
+                                🟣 ₹15,000 – ₹50,000 (Luxury)
+                            </button>
+                            <button type="button" class="budget-tier-pill px-3 py-1.5 rounded-xl text-xs font-medium transition bg-white text-gray-700 hover:bg-amber-50 border border-gray-200" data-budget-tier="ultra">
+                                👑 ₹50,000+ (Royal)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Price Slider (Col 4) -->
+                    <div class="lg:col-span-4 bg-gray-50 p-3.5 rounded-2xl border border-gray-200/80 space-y-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-gray-500 font-semibold flex items-center gap-1">
+                                <i data-lucide="sliders" class="w-3.5 h-3.5 text-gold-600"></i> Max Nightly Rent:
+                            </span>
+                            <span id="maxBudgetDisplay" class="font-bold text-navy-900 font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-gray-200">Any Budget (Up to ₹1,70,000+)</span>
+                        </div>
+                        <input type="range" id="priceBudgetSlider" min="2000" max="170000" step="2000" value="170000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-600">
+                        <div class="flex justify-between text-[10px] text-gray-400 font-medium">
+                            <span>₹2,000</span>
+                            <span>₹50,000</span>
+                            <span>₹1,70,000+</span>
+                        </div>
+                    </div>
+
+                    <!-- Sort Selector (Col 2) -->
+                    <div class="lg:col-span-2 space-y-1">
+                        <label class="block text-xs uppercase font-bold text-gray-500 tracking-wider">
+                            Sort Rents
+                        </label>
+                        <select id="roomSortSelect" class="w-full bg-white border border-gray-300 text-gray-800 rounded-xl px-3 py-2 text-xs font-semibold focus:ring-1 focus:ring-gold-500 focus:outline-none cursor-pointer shadow-sm">
+                            <option value="price-asc" selected>💰 Price: Low to High</option>
+                            <option value="price-desc">💎 Price: High to Low</option>
+                            <option value="featured">✨ Featured Collection</option>
+                            <option value="rating">⭐ Highest Rated</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- Live Results Count &amp; Clear Filter Action -->
+                <div class="mt-4 pt-3 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+                        <span id="budgetMatchingCount">Showing accommodations matching your budget</span>
+                    </div>
+                    <button type="button" onclick="resetFilters()" class="text-gold-700 hover:text-gold-900 font-semibold flex items-center gap-1 transition">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset All Filters</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Rooms Grid Container (Rendered Dynamically via app.js) -->
+        <div id="roomsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic Room Cards inserted here -->
+        </div>
+
+        <!-- Empty state when no rooms match -->
+        <div id="noRoomsMatch" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300 p-8">
+            <i data-lucide="building" class="w-12 h-12 text-gray-400 mx-auto mb-3"></i>
+            <h3 class="text-lg font-bold text-gray-700">No rooms match your filter criteria</h3>
+            <p class="text-sm text-gray-500 mt-1">Try resetting the filter category or adjusting your dates.</p>
+            <button type="button" onclick="resetFilters()" class="mt-4 px-5 py-2 bg-navy-900 text-white rounded-lg text-sm font-semibold hover:bg-gold-600 transition">Reset Filters</button>
+        </div>
+    </section>
+
+    <!-- Experience &amp; Resort Highlights Showcase -->
+    <section id="experiences" class="py-20 bg-navy-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-gold-400 font-bold">Unrivaled Hospitality</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2">Curated Luxury Experiences</h2>
+                <p class="text-gray-300 text-sm sm:text-base mt-4 font-light leading-relaxed">
+                    Beyond world-class accommodation, Grand Royale curates transformative journeys tailored precisely to your personal desires.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Experience 1 -->
+                <div class="group relative rounded-2xl overflow-hidden bg-navy-800 border border-navy-700 hover:border-gold-500/50 transition-all duration-500">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&amp;fit=crop&amp;w=800&amp;q=80" 
+                             alt="Holistic Spa Sanctuary" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-navy-900/80 backdrop-blur-md text-gold-400 text-xs px-3 py-1 rounded-full font-semibold border border-gold-400/30">
+                            Holistic Wellness
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl font-bold text-white group-hover:text-gold-400 transition">Aura Vitality Hydro-Spa</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            Signature Himalayan salt crystal scrubs, vitality steam rooms, hydrotherapy pools, and open-air pavilion massages facing the sea.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-navy-700 flex items-center justify-between text-xs text-gold-400 font-semibold">
+                            <span>Complimentary for Suite Guests</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="group relative rounded-2xl overflow-hidden bg-navy-800 border border-navy-700 hover:border-gold-500/50 transition-all duration-500">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=800&amp;q=80" 
+                             alt="Michelin Star Dining" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-navy-900/80 backdrop-blur-md text-gold-400 text-xs px-3 py-1 rounded-full font-semibold border border-gold-400/30">
+                            Gastronomy
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl font-bold text-white group-hover:text-gold-400 transition">L'Oasis 2-Star Michelin Dining</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            Under the direction of Chef Marcel Laurent, savor 9-course Mediterranean degustations paired with rare vintage cellars.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-navy-700 flex items-center justify-between text-xs text-gold-400 font-semibold">
+                            <span>Table Reservations Open</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="group relative rounded-2xl overflow-hidden bg-navy-800 border border-navy-700 hover:border-gold-500/50 transition-all duration-500">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&amp;fit=crop&amp;w=800&amp;q=80" 
+                             alt="Private Yacht Excursions" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-navy-900/80 backdrop-blur-md text-gold-400 text-xs px-3 py-1 rounded-full font-semibold border border-gold-400/30">
+                            Adventures
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl font-bold text-white group-hover:text-gold-400 transition">Sunset Catamaran &amp; Reef Safari</h3>
+                        <p class="text-gray-400 text-sm mt-2 leading-relaxed">
+                            Charter our private 65ft Sunseeker yacht for champagne sunset cruises, dolphin watching, and secluded island picnic lunches.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-navy-700 flex items-center justify-between text-xs text-gold-400 font-semibold">
+                            <span>Daily Private Charters</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amenities Grid Section -->
+    <section id="amenities" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-gold-600 font-bold">Standard In Every Stay</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy-900 mt-2">World-Class Signature Amenities</h2>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="wifi" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">Ultra High-Speed Wi-Fi</h4>
+                    <p class="text-xs text-gray-500 mt-1">Gigabit fiber throughout</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="coffee" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">Artisan Breakfast</h4>
+                    <p class="text-xs text-gray-500 mt-1">Farm-to-table daily</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="plane" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">VIP Chauffeur</h4>
+                    <p class="text-xs text-gray-500 mt-1">Airport Rolls-Royce transfer</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">Technogym Fitness</h4>
+                    <p class="text-xs text-gray-500 mt-1">With private trainers</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="wine" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">Curated Mini-Bar</h4>
+                    <p class="text-xs text-gray-500 mt-1">Restocked complimentary</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-[#FAF9F6] text-center hover:shadow-md transition border border-gray-100 flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
+                        <i data-lucide="bath" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-sm text-navy-900">Diptyque Bath Amenities</h4>
+                    <p class="text-xs text-gray-500 mt-1">Handcrafted Parisian luxury</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotional Special Package Banner -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900 text-white p-8 sm:p-14 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 border border-gold-500/30">
+            <div class="max-w-2xl">
+                <span class="inline-block bg-gold-500/20 text-gold-300 text-xs uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-gold-500/40 mb-3">
+                    Exclusive Honeymoon &amp; Escape Package
+                </span>
+                <h3 class="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                    Complimentary Helicopter Transfer with Any 5+ Night Overwater Villa Stay
+                </h3>
+                <p class="text-gray-300 text-sm sm:text-base mt-4 font-light">
+                    Book direct through our concierge and receive a private helicopter or speedboat transfer, bottle of Dom Pérignon on arrival, and daily breakfast served on your private lagoon deck.
+                </p>
+                <div class="flex items-center gap-6 mt-6 text-xs text-gray-400">
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-4 h-4 text-gold-400"></i> No upfront payment required</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-4 h-4 text-gold-400"></i> Best Rate Guarantee</span>
+                </div>
+            </div>
+            <div>
+                <a href="#rooms" class="bg-gold-500 hover:bg-gold-600 text-navy-900 px-8 py-4 rounded-full font-bold shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                    <span>Claim Package Offer</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guest Reviews &amp; Testimonials -->
+    <section id="reviews" class="py-20 bg-[#FAF9F6]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-gold-600 font-bold">Unforgettable Memories</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy-900 mt-2">What Our Guests Say</h2>
+                <div class="flex items-center justify-center space-x-1 mt-4">
+                    <div class="flex text-gold-500">
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    </div>
+                    <span class="text-sm font-bold text-navy-900 ml-2">4.97 / 5.0</span>
+                    <span class="text-xs text-gray-500">(Over 2,400 verified reviews)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
+                    <div class="text-gold-500 mb-4 flex">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-700 text-sm italic leading-relaxed">
+                        "From our arrival via water limousine to the private candlelit dinner under the stars, Grand Royale exceeded every single expectation. The personal butler was attentive without ever being intrusive. Truly paradise."
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=120&amp;q=80" alt="Lady Victoria Sterling" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm text-navy-900">Lady Victoria Sterling</h4>
+                            <p class="text-xs text-gray-400">London, United Kingdom · Presidential Villa</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
+                    <div class="text-gold-500 mb-4 flex">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-700 text-sm italic leading-relaxed">
+                        "The overwater villa gave us direct access to the most pristine coral reef I have ever witnessed. Waking up to turquoise water and the breakfast floating tray is an experience we will cherish forever."
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;w=120&amp;q=80" alt="Dr. Alexander Chen" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm text-navy-900">Dr. Alexander Chen</h4>
+                            <p class="text-xs text-gray-400">Geneva, Switzerland · Azure Overwater Suite</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
+                    <div class="text-gold-500 mb-4 flex">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-700 text-sm italic leading-relaxed">
+                        "The seamless booking system, customized dietary options for our family, and the private yacht excursion made our 15th wedding anniversary completely unforgettable. 10/10 in luxury standards."
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=120&amp;q=80" alt="Marcus &amp; Elena Thorne" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-sm text-navy-900">Marcus &amp; Elena Thorne</h4>
+                            <p class="text-xs text-gray-400">New York, USA · Royal Ocean Penthouse</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs uppercase tracking-widest text-gold-600 font-bold">Everything You Need To Know</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy-900 mt-2">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="space-y-4" id="faqAccordion">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+                    <button type="button" class="faq-question w-full p-5 text-left font-semibold text-navy-900 flex justify-between items-center hover:bg-gray-50">
+                        <span>What time is check-in and check-out? Can I request early arrival?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition transform"></i>
+                    </button>
+                    <div class="faq-answer px-5 pb-5 text-sm text-gray-600 leading-relaxed hidden">
+                        Standard check-in begins at 3:00 PM, and check-out is at 12:00 PM (noon). Early arrival and late check-out can be requested upon booking and are subject to availability. Our lounge and spa are always at your disposal if your room is being prepared.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+                    <button type="button" class="faq-question w-full p-5 text-left font-semibold text-navy-900 flex justify-between items-center hover:bg-gray-50">
+                        <span>What is your cancellation and refund policy?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition transform"></i>
+                    </button>
+                    <div class="faq-answer px-5 pb-5 text-sm text-gray-600 leading-relaxed hidden">
+                        We offer full flexibility on direct bookings. You can cancel or modify your reservation up to 48 hours prior to your scheduled arrival date without any penalty fees or lock-ins.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+                    <button type="button" class="faq-question w-full p-5 text-left font-semibold text-navy-900 flex justify-between items-center hover:bg-gray-50">
+                        <span>Are airport transfers and limousine pickups included?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition transform"></i>
+                    </button>
+                    <div class="faq-answer px-5 pb-5 text-sm text-gray-600 leading-relaxed hidden">
+                        All Penthouse and Private Villa reservations include complimentary private airport transfers via luxury sedan or speedboat. For other suites, VIP private chauffeur transfers can be selected in the booking add-ons at checkout.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden transition">
+                    <button type="button" class="faq-question w-full p-5 text-left font-semibold text-navy-900 flex justify-between items-center hover:bg-gray-50">
+                        <span>Are children and pets permitted at the resort?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition transform"></i>
+                    </button>
+                    <div class="faq-answer px-5 pb-5 text-sm text-gray-600 leading-relaxed hidden">
+                        We welcome families warmly and offer dedicated kids' nature clubs, nanny services, and family pool areas. Small companion pets (under 25 lbs) are welcomed in select garden villa suites with luxury pet amenities.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-gray-400 pt-16 pb-12 border-t border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+                <!-- Col 1: Brand Info -->
+                <div class="lg:col-span-2">
+                    <a href="#" class="flex items-center space-x-3 group mb-4">
+                        <div class="w-10 h-10 rounded-full border border-gold-400 flex items-center justify-center bg-gold-500/20">
+                            <i data-lucide="crown" class="w-5 h-5 text-gold-400"></i>
+                        </div>
+                        <div>
+                            <span class="font-serif text-2xl font-bold tracking-wider text-white uppercase block leading-none">Grand Royale</span>
+                            <span class="text-[9px] tracking-widest text-gold-400 uppercase font-semibold block mt-0.5">Smart Hotel Booking System</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-gray-400 max-w-sm leading-relaxed mb-6">
+                        An emblem of bespoke luxury, architectural serenity, and unforgettable hospitality across the world's most sought-after coastlines.
+                    </p>
+                    <div class="flex space-x-4 text-gray-300">
+                        <a href="#" class="w-9 h-9 rounded-full bg-navy-800 hover:bg-gold-500 hover:text-navy-900 transition flex items-center justify-center"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-navy-800 hover:bg-gold-500 hover:text-navy-900 transition flex items-center justify-center"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-navy-800 hover:bg-gold-500 hover:text-navy-900 transition flex items-center justify-center"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-navy-800 hover:bg-gold-500 hover:text-navy-900 transition flex items-center justify-center"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Destinations -->
+                <div>
+                    <h5 class="text-white font-serif font-bold text-sm tracking-wider uppercase mb-4">Resorts</h5>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#" class="hover:text-gold-400 transition">Grand Royale Maldives Atoll</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Grand Royale Monaco Bay</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Grand Royale Santorini Cliff</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Grand Royale Kyoto Pavilion</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Grand Royale Aspen Lodge</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Experiences -->
+                <div>
+                    <h5 class="text-white font-serif font-bold text-sm tracking-wider uppercase mb-4">Experiences</h5>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#experiences" class="hover:text-gold-400 transition">Aura Vitality Spa</a></li>
+                        <li><a href="#dining" class="hover:text-gold-400 transition">Michelin Gastronomy</a></li>
+                        <li><a href="#experiences" class="hover:text-gold-400 transition">Private Yacht Charters</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Weddings &amp; Galas</a></li>
+                        <li><a href="#" class="hover:text-gold-400 transition">Helicopter Excursions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Newsletter -->
+                <div>
+                    <h5 class="text-white font-serif font-bold text-sm tracking-wider uppercase mb-4">The Grand Royale Society</h5>
+                    <p class="text-xs text-gray-400 mb-3 leading-relaxed">
+                        Subscribe for private seasonal invitations, complimentary suite upgrades, and private member offers.
+                    </p>
+                    <form id="newsletterForm" class="space-y-2">
+                        <input type="email" id="newsletterEmail" required placeholder="Enter your email" class="w-full bg-navy-800 border border-navy-700 rounded-lg px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-gold-500">
+                        <button type="submit" class="w-full bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold text-xs py-2.5 rounded-lg transition">Join The Society</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-navy-800 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2026 Grand Royale – Smart Hotel Booking System. All rights reserved.</p>
+                <div class="flex flex-wrap items-center space-x-6 mt-4 sm:mt-0">
+                    <a href="/admin" target="_blank" class="text-gold-400 font-semibold hover:underline flex items-center gap-1.5">
+                        <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                        <span>Admin Portal</span>
+                    </a>
+                    <a href="#" class="hover:text-gold-400 transition">Privacy Notice</a>
+                    <a href="#" class="hover:text-gold-400 transition">Terms of Reservation</a>
+                    <a href="#" class="hover:text-gold-400 transition">Cookie Preferences</a>
+                    <a href="#" class="hover:text-gold-400 transition">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: AUTHENTICATION / LOGIN WITH EMAIL OR PHONE OTP -->
+    <!-- ============================================================== -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 transform transition-all relative">
+            
+            <!-- Auth Header -->
+            <div class="px-6 pt-6 pb-4 border-b border-gray-100 bg-[#FAF9F6] flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-full bg-gold-100 border border-gold-400 flex items-center justify-center text-gold-600">
+                        <i data-lucide="crown" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-navy-900">The Grand Royale Society</h3>
+                        <p class="text-[11px] text-gray-500">Sign in or register with instant OTP</p>
+                    </div>
+                </div>
+                <button type="button" id="closeAuthModal" class="p-1 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-6">
+                
+                <!-- ================= STEP 1: INPUT IDENTIFIER ================= -->
+                <div id="authStepInput">
+                    <!-- Method Toggle Tabs -->
+                    <div class="flex p-1 bg-gray-100 rounded-xl mb-5">
+                        <button type="button" id="authTabEmail" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 bg-white text-navy-900 shadow-sm">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-gold-600"></i>
+                            <span>Email Address</span>
+                        </button>
+                        <button type="button" id="authTabPhone" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 text-gray-600 hover:text-navy-900">
+                            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-gray-400"></i>
+                            <span>Phone Number</span>
+                        </button>
+                    </div>
+
+                    <form id="authIdentifierForm" class="space-y-4">
+                        <!-- Guest Full Name (for member profile) -->
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Your Full Name</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="w-4 h-4 text-gray-400 absolute left-3 top-3"></i>
+                                <input type="text" id="authGuestName" required placeholder="e.g. Lady Victoria Sterling" class="w-full pl-9 pr-3 py-2.5 text-xs border border-gray-300 rounded-xl focus:border-gold-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Email Field Container -->
+                        <div id="authEmailContainer">
+                            <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Email Address</label>
+                            <div class="relative">
+                                <i data-lucide="at-sign" class="w-4 h-4 text-gray-400 absolute left-3 top-3"></i>
+                                <input type="email" id="authEmailInput" placeholder="guest@luxurytravel.com" class="w-full pl-9 pr-3 py-2.5 text-xs border border-gray-300 rounded-xl focus:border-gold-500 focus:outline-none">
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1">We will send a 6-digit verification code to this inbox.</p>
+                        </div>
+
+                        <!-- Phone Field Container (Hidden initially) -->
+                        <div id="authPhoneContainer" class="hidden">
+                            <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Mobile Number</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="authCountryCode" class="col-span-1 text-xs border border-gray-300 rounded-xl py-2.5 px-2 bg-gray-50 focus:border-gold-500 focus:outline-none">
+                                    <option value="+1">+1 (US/CA)</option>
+                                    <option value="+44">+44 (UK)</option>
+                                    <option value="+91" selected>+91 (India)</option>
+                                    <option value="+33">+33 (FR)</option>
+                                    <option value="+971">+971 (UAE)</option>
+                                    <option value="+49">+49 (DE)</option>
+                                    <option value="+61">+61 (AU)</option>
+                                    <option value="+81">+81 (JP)</option>
+                                    <option value="+41">+41 (CH)</option>
+                                </select>
+                                <input type="tel" id="authPhoneInput" placeholder="98765 43210" class="col-span-2 text-xs border border-gray-300 rounded-xl py-2.5 px-3 focus:border-gold-500 focus:outline-none">
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1">We will send a 6-digit verification code to this mobile.</p>
+
+                            <!-- CallMeBot WhatsApp Integration Box -->
+                            <div class="mt-3.5 p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-2xl text-xs space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5 font-bold text-emerald-950">
+                                        <i data-lucide="message-square" class="w-4 h-4 text-emerald-600"></i>
+                                        <span>CallMeBot WhatsApp Delivery</span>
+                                    </div>
+                                    <span class="text-[10px] bg-emerald-200/70 text-emerald-800 font-bold px-2 py-0.5 rounded-full">100% Free</span>
+                                </div>
+                                <p class="text-[11px] text-emerald-800 leading-snug">
+                                    Get your real OTP delivered directly to your mobile via WhatsApp with CallMeBot:
+                                </p>
+
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] font-bold text-emerald-900 uppercase tracking-wider">Your CallMeBot API Key</label>
+                                    <div class="relative">
+                                        <i data-lucide="key" class="w-3.5 h-3.5 text-emerald-600 absolute left-2.5 top-2.5"></i>
+                                        <input type="text" id="callmebotApiKeyInput" placeholder="Enter CallMeBot API key (e.g. 123456)" class="w-full pl-8 pr-3 py-2 text-xs border border-emerald-300 rounded-lg bg-white text-emerald-950 placeholder-emerald-400 focus:border-emerald-600 focus:outline-none">
+                                    </div>
+                                </div>
+
+                                <div class="pt-1">
+                                    <a id="getCallMeBotKeyBtn" href="https://wa.me/34644444946?text=I%20allow%20callmebot%20to%20send%20me%20messages" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 transition shadow-sm">
+                                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        <span>Click Here to Activate &amp; Get Key on WhatsApp</span>
+                                    </a>
+                                </div>
+
+                                <div class="bg-white/80 border border-emerald-100 rounded-lg p-2 text-[10px] text-emerald-900 space-y-1">
+                                    <div class="font-bold flex items-center gap-1">
+                                        <i data-lucide="info" class="w-3 h-3 text-emerald-600"></i>
+                                        <span>How CallMeBot works (30 seconds):</span>
+                                    </div>
+                                    <ol class="list-decimal list-inside space-y-0.5 text-emerald-800 pl-1">
+                                        <li>Click the button above to chat with CallMeBot on WhatsApp.</li>
+                                        <li>Send message: <code>I allow callmebot to send me messages</code>.</li>
+                                        <li>CallMeBot replies with your API key &mdash; paste it above!</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="sendOtpBtn" class="w-full bg-navy-900 hover:bg-gold-600 text-white font-bold py-3 rounded-xl text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl mt-2">
+                            <span>Get Verification Code</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-center gap-2 text-[11px] text-gray-400 text-center">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-gold-600"></i>
+                        <span>Secure passwordless authentication &amp; 256-bit encryption</span>
+                    </div>
+                </div>
+
+                <!-- ================= STEP 2: ENTER OTP ================= -->
+                <div id="authStepOtp" class="hidden">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mx-auto mb-2 border border-gold-200">
+                            <i data-lucide="key-round" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-serif font-bold text-base text-navy-900">Enter Verification Code</h4>
+                        <p class="text-xs text-gray-500 mt-1">
+                            A 6-digit one-time passcode was dispatched to: <br>
+                            <strong id="authOtpTargetDisplay" class="text-navy-900 font-semibold">user@example.com</strong>
+                        </p>
+                    </div>
+
+                    <!-- Carrier Dispatch Status Notice (No code revealed on webpage) -->
+                    <div id="authDispatchNotice" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 mb-5 text-xs text-emerald-900 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-600">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-emerald-950" id="authDispatchTitle">Security Passcode Dispatched</p>
+                            <p class="text-[11px] text-emerald-700" id="authDispatchSubtitle">Please check WhatsApp or messages on your phone.</p>
+                        </div>
+                    </div>
+
+                    <!-- 6 Digit Input Boxes -->
+                    <form id="verifyOtpForm">
+                        <div class="flex justify-between items-center gap-2 my-5" id="otpInputsContainer">
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="0" autofocus>
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="1">
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="2">
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="3">
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="4">
+                            <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="5">
+                        </div>
+
+                        <button type="submit" id="verifyOtpSubmitBtn" class="w-full bg-navy-900 hover:bg-gold-600 text-white font-bold py-3 rounded-xl text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i>
+                            <span>Verify &amp; Sign In</span>
+                        </button>
+                    </form>
+
+                    <!-- WhatsApp Instant Delivery Option -->
+                    <div id="whatsappDeliveryContainer" class="hidden mt-3 pt-3 border-t border-gray-100">
+                        <a id="whatsappOtpLink" href="#" target="_blank" class="w-full border border-emerald-500 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
+                            <span id="whatsappDeliveryText">Send passcode to my phone via WhatsApp</span>
+                        </a>
+                        <p class="text-[10px] text-gray-400 text-center mt-1">Free instant delivery directly to your phone</p>
+                    </div>
+
+                    <!-- Resend &amp; Edit details -->
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                        <button type="button" id="backToIdentifierBtn" class="hover:text-navy-900 transition flex items-center gap-1 font-medium">
+                            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                            <span>Edit contact info</span>
+                        </button>
+                        <button type="button" id="resendOtpBtn" disabled class="text-gold-700 hover:text-gold-800 disabled:opacity-40 font-bold transition">
+                            Resend (<span id="resendTimerSpan">30</span>s)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: ROOM QUICK VIEW &amp; BOOKING FLOW -->
+    <!-- ============================================================== -->
+    <div id="bookingModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-gray-100 transform transition-all relative">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#FAF9F6]">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="crown" class="w-5 h-5 text-gold-600"></i>
+                    <h3 id="modalRoomTitle" class="font-serif text-lg font-bold text-navy-900">Reserve Your Suite</h3>
+                </div>
+                <button type="button" id="closeBookingModal" class="p-1 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Two-column layout on medium screens) -->
+            <div class="p-6 sm:p-8 max-h-[80vh] overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Left: Room Summary &amp; Image -->
+                    <div>
+                        <div class="rounded-2xl overflow-hidden shadow-md relative h-52 mb-4">
+                            <img id="modalRoomImage" src="" alt="Room Preview" class="w-full h-full object-cover">
+                            <span id="modalRoomTag" class="absolute top-3 left-3 bg-navy-900/90 text-gold-300 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                                Oceanfront
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-xs text-gray-500 pb-2 border-b border-gray-100">
+                                <span class="flex items-center gap-1"><i data-lucide="maximize" class="w-3.5 h-3.5 text-gold-600"></i> <span id="modalRoomSize">1,200 sq ft</span></span>
+                                <span class="flex items-center gap-1"><i data-lucide="users" class="w-3.5 h-3.5 text-gold-600"></i> <span id="modalRoomGuests">Max 3 Guests</span></span>
+                                <span class="flex items-center gap-1"><i data-lucide="bed" class="w-3.5 h-3.5 text-gold-600"></i> <span id="modalRoomBed">King Size</span></span>
+                            </div>
+
+                            <p id="modalRoomDesc" class="text-xs text-gray-600 leading-relaxed">
+                                Luxurious suite description will appear here with highlighted bespoke features.
+                            </p>
+
+                            <!-- Add-on upgrades selection -->
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-2">Enhance Your Stay</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center justify-between p-2.5 rounded-lg border border-gray-200 hover:border-gold-500 cursor-pointer text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" id="addonBreakfast" class="addon-checkbox text-gold-600 rounded focus:ring-0">
+                                            <span>Champagne Gourmet Breakfast</span>
+                                        </div>
+                                        <span id="addonBreakfastPrice" class="font-bold text-navy-900">+₹3,825/night</span>
+                                    </label>
+                                    <label class="flex items-center justify-between p-2.5 rounded-lg border border-gray-200 hover:border-gold-500 cursor-pointer text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" id="addonTransfer" class="addon-checkbox text-gold-600 rounded focus:ring-0">
+                                            <span>Airport VIP Limousine Pickup</span>
+                                        </div>
+                                        <span id="addonTransferPrice" class="font-bold text-navy-900">+₹8,075 one-time</span>
+                                    </label>
+                                    <label class="flex items-center justify-between p-2.5 rounded-lg border border-gray-200 hover:border-gold-500 cursor-pointer text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" id="addonSpa" class="addon-checkbox text-gold-600 rounded focus:ring-0">
+                                            <span>Couple's 60-min Aromatherapy Spa</span>
+                                        </div>
+                                        <span id="addonSpaPrice" class="font-bold text-navy-900">+₹15,300</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Guest Details &amp; Pricing Breakdown -->
+                    <div class="flex flex-col justify-between">
+                        <form id="reservationForm" class="space-y-4">
+                            <!-- Logged In Member Auto-Fill Notice -->
+                            <div id="bookingMemberNotice" class="hidden bg-gold-50 border border-gold-200 text-gold-900 rounded-xl p-2.5 flex items-center justify-between text-xs">
+                                <span class="flex items-center gap-1.5 font-medium">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-600"></i>
+                                    <span>Society member details applied</span>
+                                </span>
+                                <span class="text-[10px] font-bold bg-white text-gold-700 px-2 py-0.5 rounded border border-gold-300">Member Privileges Active</span>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Full Name</label>
+                                <input type="text" id="guestName" required placeholder="e.g. Lady Victoria Sterling" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 focus:border-gold-500 focus:outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Email</label>
+                                    <input type="email" id="guestEmail" required placeholder="guest@example.com" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 focus:border-gold-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Phone Number</label>
+                                    <input type="tel" id="guestPhone" required placeholder="+1 (555) 000-0000" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 focus:border-gold-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 bg-gray-50 p-2.5 rounded-lg border border-gray-200 text-xs">
+                                <div>
+                                    <span class="text-gray-500 block">Check-in</span>
+                                    <strong id="modalCheckInSummary" class="text-navy-900">Tomorrow</strong>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block">Check-out</span>
+                                    <strong id="modalCheckOutSummary" class="text-navy-900">In 3 Days</strong>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Special Requests (Optional)</label>
+                                <textarea id="guestSpecialRequests" rows="2" placeholder="Dietary preferences, high floor, anniversary surprise..." class="w-full text-xs border border-gray-300 rounded-lg p-2 focus:border-gold-500 focus:outline-none"></textarea>
+                            </div>
+
+                            <!-- Cost Breakdown Box -->
+                            <div class="bg-gold-50/60 p-4 rounded-xl border border-gold-200 text-xs space-y-1.5">
+                                <div class="flex justify-between text-gray-600">
+                                    <span>Base Rate (<span id="calcNightCount">3</span> nights):</span>
+                                    <span id="calcBaseTotal" class="font-semibold text-navy-900">₹2,16,750</span>
+                                </div>
+                                <div class="flex justify-between text-gray-600">
+                                    <span>Selected Add-ons:</span>
+                                    <span id="calcAddonsTotal" class="font-semibold text-navy-900">₹0</span>
+                                </div>
+                                <div class="flex justify-between text-gray-600">
+                                    <span>Taxes &amp; Luxury Resort Service (12%):</span>
+                                    <span id="calcTaxesTotal" class="font-semibold text-navy-900">₹26,010</span>
+                                </div>
+                                <div class="pt-2 border-t border-gold-200 flex justify-between text-sm font-bold text-navy-900">
+                                    <span>Total Due at Check-in:</span>
+                                    <span id="calcGrandTotal" class="text-gold-600 text-base font-serif font-black">₹2,42,760</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-navy-900 hover:bg-gold-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+                                <i data-lucide="credit-card" class="w-4 h-4 text-gold-400"></i>
+                                <span>Proceed to Payment</span>
+                            </button>
+                            <p class="text-[11px] text-gray-400 text-center">Instant secure payment • Multiple payment methods supported</p>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: ROOM BOOKING OTP VERIFICATION -->
+    <!-- ============================================================== -->
+    <div id="bookingOtpModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 transform transition-all relative">
+            <!-- Header -->
+            <div class="px-6 pt-6 pb-4 border-b border-gray-100 bg-[#FAF9F6] flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-full bg-gold-100 border border-gold-400 flex items-center justify-center text-gold-600">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-navy-900">Verify Your Reservation</h3>
+                        <p class="text-[11px] text-gray-500">Security Email Verification</p>
+                    </div>
+                </div>
+                <button type="button" id="closeBookingOtpModal" class="p-1 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6">
+                <div class="text-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gold-50 text-gold-600 flex items-center justify-center mx-auto mb-2 border border-gold-200">
+                        <i data-lucide="mail-check" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-serif font-bold text-base text-navy-900">Enter Verification Code</h4>
+                    <p class="text-xs text-gray-500 mt-1">
+                        A 6-digit one-time passcode was dispatched to: <br>
+                        <strong id="bookingOtpEmailDisplay" class="text-navy-900 font-semibold">guest@example.com</strong>
+                    </p>
+                </div>
+
+                <!-- Status Banner -->
+                <div id="bookingOtpNotice" class="bg-blue-50 border border-blue-200 rounded-2xl p-3.5 mb-5 text-xs text-blue-900 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-blue-600">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-blue-950" id="bookingOtpNoticeTitle">Email Verification Sent</p>
+                        <p class="text-[11px] text-blue-700" id="bookingOtpNoticeSubtitle">Please check your inbox (and spam folder). Valid for 5 minutes.</p>
+                    </div>
+                </div>
+
+                <!-- 6 Digit Input Boxes -->
+                <form id="verifyBookingOtpForm">
+                    <div class="flex justify-between items-center gap-2 my-5" id="bookingOtpInputsContainer">
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="0" autofocus>
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="1">
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="2">
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="3">
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="4">
+                        <input type="text" inputmode="numeric" maxlength="1" class="booking-otp-input w-11 h-13 text-center text-xl font-bold font-mono border-2 border-gray-200 rounded-xl focus:border-gold-500 bg-white" data-index="5">
+                    </div>
+
+                    <button type="submit" id="verifyBookingOtpSubmitBtn" class="w-full bg-navy-900 hover:bg-gold-600 text-white font-bold py-3.5 rounded-xl text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>Verify &amp; Proceed to Payment</span>
+                    </button>
+                </form>
+
+                <!-- Resend & Back controls -->
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                    <button type="button" id="backToReservationBtn" class="hover:text-navy-900 transition flex items-center gap-1 font-medium">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                        <span>Edit booking details</span>
+                    </button>
+                    <button type="button" id="resendBookingOtpBtn" disabled class="text-gold-700 hover:text-gold-800 disabled:opacity-40 font-bold transition">
+                        Resend (<span id="bookingResendTimerSpan">30</span>s)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: PAYMENT CHECKOUT PAGE -->
+    <!-- ============================================================== -->
+    <div id="paymentModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-gray-100 relative max-h-[92vh] overflow-y-auto">
+            <!-- Close Button -->
+            <button type="button" id="closePaymentModal" class="absolute top-5 right-5 p-1 rounded-full text-gray-400 hover:text-navy-900 hover:bg-gray-100 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Header -->
+            <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-gold-50 border border-gold-200 text-gold-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="credit-card" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] uppercase tracking-widest text-gold-700 font-bold bg-gold-50 px-2.5 py-0.5 rounded-full border border-gold-200">Payment Checkout</span>
+                        <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-semibold border border-emerald-200 flex items-center gap-1">
+                            <i data-lucide="shield-check" class="w-3 h-3"></i> 256-Bit SSL Encrypted
+                        </span>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-navy-900 mt-0.5">Complete Reservation Payment</h3>
+                </div>
+            </div>
+
+            <!-- Booking Summary Banner -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img id="paymentSuiteImage" src="" alt="Suite" class="w-16 h-16 rounded-xl object-cover border border-gray-200 shadow-sm shrink-0">
+                    <div>
+                        <h4 id="paymentSuiteTitle" class="font-serif font-bold text-navy-900 text-sm">Luxury Ocean Suite</h4>
+                        <p id="paymentStayDates" class="text-xs text-gray-500 mt-0.5">3 Nights • 2 Guests</p>
+                        <p class="text-[11px] text-gray-400">Guest: <span id="paymentGuestName" class="font-medium text-gray-700">Valued Guest</span></p>
+                    </div>
+                </div>
+                <div class="text-right sm:border-l sm:border-slate-200 sm:pl-4 w-full sm:w-auto flex sm:flex-col justify-between items-center sm:items-end">
+                    <span class="text-xs text-gray-500 uppercase tracking-wider block">Total Amount</span>
+                    <strong id="paymentGrandTotalDisplay" class="text-lg font-serif font-black text-gold-600">₹2,42,760</strong>
+                </div>
+            </div>
+
+            <!-- Payment Methods Tabs -->
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-2">Select Payment Method</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <button type="button" class="payment-tab-btn active p-3 rounded-xl border border-gold-500 bg-gold-50/50 text-navy-900 font-bold flex flex-col items-center gap-1.5 transition" data-method="card">
+                        <i data-lucide="credit-card" class="w-4 h-4 text-gold-600"></i>
+                        <span>Card</span>
+                    </button>
+                    <button type="button" class="payment-tab-btn p-3 rounded-xl border border-gray-200 hover:border-gray-300 bg-white text-gray-600 font-medium flex flex-col items-center gap-1.5 transition" data-method="upi">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-gold-600"></i>
+                        <span>UPI / QR</span>
+                    </button>
+                    <button type="button" class="payment-tab-btn p-3 rounded-xl border border-gray-200 hover:border-gray-300 bg-white text-gray-600 font-medium flex flex-col items-center gap-1.5 transition" data-method="netbanking">
+                        <i data-lucide="building" class="w-4 h-4 text-gold-600"></i>
+                        <span>Net Banking</span>
+                    </button>
+                    <button type="button" class="payment-tab-btn p-3 rounded-xl border border-gray-200 hover:border-gray-300 bg-white text-gray-600 font-medium flex flex-col items-center gap-1.5 transition" data-method="hotel">
+                        <i data-lucide="hotel" class="w-4 h-4 text-gold-600"></i>
+                        <span>Pay at Hotel</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payment Forms Container -->
+            <form id="checkoutPaymentForm" class="space-y-4">
+                <!-- 1. Card Form -->
+                <div id="methodCardFields" class="payment-field-group space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Cardholder Name</label>
+                        <input type="text" id="payCardName" placeholder="Name as embossed on card" value="Lady Victoria Sterling" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 focus:border-gold-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Card Number</label>
+                        <div class="relative">
+                            <input type="text" id="payCardNumber" maxlength="19" placeholder="4532 8901 2345 6789" value="4532 8901 2345 6789" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 pr-10 font-mono focus:border-gold-500 focus:outline-none">
+                            <i data-lucide="lock" class="w-4 h-4 text-gray-400 absolute right-3 top-3"></i>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Expiry (MM/YY)</label>
+                            <input type="text" id="payCardExpiry" maxlength="5" placeholder="12/28" value="12/28" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 font-mono focus:border-gold-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">CVV / CVC</label>
+                            <input type="password" id="payCardCvv" maxlength="4" placeholder="•••" value="888" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 font-mono focus:border-gold-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. UPI Fields -->
+                <div id="methodUpiFields" class="payment-field-group hidden space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Virtual Payment Address (UPI ID)</label>
+                        <input type="text" id="payUpiId" placeholder="username@oksbi / username@okaxis" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 font-mono focus:border-gold-500 focus:outline-none">
+                    </div>
+                    <div class="p-3 bg-gray-50 border border-gray-200 rounded-xl text-center">
+                        <span class="text-xs text-gray-500 block mb-2 font-medium">Or scan via Google Pay, PhonePe, Paytm:</span>
+                        <div class="w-32 h-32 bg-white p-2 rounded-lg border border-gray-300 mx-auto flex items-center justify-center shadow-sm">
+                            <i data-lucide="qr-code" class="w-24 h-24 text-navy-900"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-2 block font-mono">UPI ID: grandroyale@icici</span>
+                    </div>
+                </div>
+
+                <!-- 3. Net Banking Fields -->
+                <div id="methodNetbankingFields" class="payment-field-group hidden space-y-3">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Select Bank</label>
+                    <select id="payNetbankSelect" class="w-full text-xs border border-gray-300 rounded-lg p-2.5 focus:border-gold-500 focus:outline-none bg-white">
+                        <option value="HDFC">HDFC Bank</option>
+                        <option value="SBI">State Bank of India</option>
+                        <option value="ICICI">ICICI Bank</option>
+                        <option value="AXIS">Axis Bank</option>
+                        <option value="KOTAK">Kotak Mahindra Bank</option>
+                    </select>
+                </div>
+
+                <!-- 4. Pay at Hotel Desk -->
+                <div id="methodHotelFields" class="payment-field-group hidden space-y-3">
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 leading-relaxed">
+                        <p class="font-bold flex items-center gap-1.5 mb-1">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                            <span>Zero Immediate Charge</span>
+                        </p>
+                        Your suite will be guaranteed under your verified contact details. You can complete payment via Cash, UPI, or Credit Card directly at the concierge reception desk upon arrival.
+                    </div>
+                </div>
+
+                <!-- Security Trust Footer -->
+                <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                    <span class="flex items-center gap-1"><i data-lucide="shield" class="w-3.5 h-3.5 text-gold-600"></i> 256-Bit SSL Encrypted</span>
+                    <span>PCI-DSS Level 1 Certified</span>
+                </div>
+
+                <!-- Pay Button -->
+                <button type="submit" id="submitPaymentBtn" class="w-full bg-navy-900 hover:bg-gold-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
+                    <i data-lucide="lock" class="w-4 h-4 text-gold-300"></i>
+                    <span>Confirm &amp; Pay <span id="payButtonAmountDisplay">₹2,42,760</span></span>
+                </button>
+
+                <button type="button" id="backToBookingFromPaymentBtn" class="w-full mt-2 text-xs text-gray-400 hover:text-navy-900 font-medium inline-flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    <span>← Back to Room Details</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: RESERVATION SUCCESS CONFIRMATION -->
+    <!-- ============================================================== -->
+    <div id="successModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl border border-gray-100 transform transition-all">
+            <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i data-lucide="check" class="w-8 h-8"></i>
+            </div>
+
+            <span class="text-xs uppercase tracking-widest text-gold-600 font-bold">Booking Confirmed</span>
+            <h3 class="font-serif text-2xl font-bold text-navy-900 mt-1">We Await Your Arrival</h3>
+            <p class="text-xs text-gray-500 mt-2">
+                A confirmation dossier and itinerary has been sent to your email address.
+            </p>
+
+            <div class="my-6 p-4 rounded-2xl bg-[#FAF9F6] border border-gray-200 text-left text-xs space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Booking Reference:</span>
+                    <strong id="confirmRefCode" class="text-gold-600 font-mono text-sm">AUR-784920</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Guest Name:</span>
+                    <strong id="confirmGuestName" class="text-navy-900">Lady Victoria Sterling</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Suite Reserved:</span>
+                    <strong id="confirmRoomName" class="text-navy-900">Azure Ocean Villa</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-500">Dates:</span>
+                    <strong id="confirmStayDates" class="text-navy-900">Oct 29 — Nov 01, 2026</strong>
+                </div>
+                <div class="flex justify-between pt-2 border-t border-gray-200 font-bold">
+                    <span class="text-navy-900">Total Confirmed:</span>
+                    <strong id="confirmTotalPaid" class="text-gold-600 text-sm">₹2,42,760</strong>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" id="printConfirmationBtn" class="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    <span>Print Voucher</span>
+                </button>
+                <button type="button" id="closeSuccessModal" class="flex-1 bg-navy-900 hover:bg-gold-600 text-white font-semibold py-2.5 rounded-xl text-xs transition">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: MY BOOKINGS DRAWER / MODAL -->
+    <!-- ============================================================== -->
+    <div id="myBookingsModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 relative">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="bookmark-check" class="w-5 h-5 text-gold-600"></i>
+                    <h3 class="font-serif text-xl font-bold text-navy-900">My Saved Reservations</h3>
+                </div>
+                <button type="button" id="closeMyBookingsModal" class="text-gray-400 hover:text-navy-900">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div id="savedBookingsList" class="space-y-4 max-h-[60vh] overflow-y-auto">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <div id="noSavedBookings" class="hidden text-center py-8 text-gray-400">
+                <i data-lucide="calendar-x" class="w-10 h-10 mx-auto mb-2 text-gray-300"></i>
+                <p class="text-sm font-semibold">No active bookings found</p>
+                <p class="text-xs text-gray-400 mt-1">Select any luxury suite to make your first reservation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Script imports -->
+    <script src="app.js?v=3"></script>
+</body>
+</html>

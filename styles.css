@@ -1,0 +1,105 @@
+/* ========================================================
+   GRAND ROYALE – SMART HOTEL BOOKING SYSTEM - CUSTOM STYLES
+   ======================================================== */
+
+@keyframes slowZoom {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-slow-zoom {
+    animation: slowZoom 24s ease-in-out infinite;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F3F4F6;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D5B783;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #C5A059;
+}
+
+/* Card hover glow & luxury feel */
+.room-card {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s;
+}
+
+.room-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 30px -10px rgba(11, 19, 37, 0.12), 0 10px 10px -5px rgba(11, 19, 37, 0.04);
+}
+
+/* Button pulse subtle effect */
+.btn-gold-glow:hover {
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.45);
+}
+
+/* Wishlist heart animation */
+.wishlist-btn.active svg {
+    fill: #EF4444;
+    stroke: #EF4444;
+}
+
+/* Modern accordion transition */
+.faq-question svg {
+    transition: transform 0.3s ease;
+}
+
+.faq-question.active svg {
+    transform: rotate(180deg);
+}
+
+/* Input custom focus styles */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    filter: invert(0.2);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Custom Badge */
+.gold-badge {
+    background: linear-gradient(135deg, #F9F5EC 0%, #EFE3CE 100%);
+    border: 1px solid #D5B783;
+    color: #7F642E;
+}
+
+/* OTP Digit Box Styling */
+.otp-input {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.otp-input:focus {
+    border-color: #C5A059;
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.otp-input.filled {
+    background-color: #FDFBF7;
+    border-color: #C5A059;
+    color: #0B1325;
+}
+

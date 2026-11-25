@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Royale – Smart Hotel Booking System | Admin Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FDFBF7',
+                            100: '#F9F5EC',
+                            200: '#EFE3CE',
+                            300: '#E4CFAC',
+                            400: '#D5B783',
+                            500: '#C5A059',
+                            600: '#A6833E',
+                            700: '#7F642E',
+                            800: '#5A4621',
+                            900: '#3A2D15',
+                        },
+                        navy: {
+                            950: '#060B17',
+                            900: '#0B1325',
+                            850: '#0F1A33',
+                            800: '#141E33',
+                            700: '#1E2C4A',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0B1325; }
+        ::-webkit-scrollbar-thumb { background: #1E2C4A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C5A059; }
+        .glass-card {
+            background: rgba(15, 26, 51, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 160, 89, 0.18);
+        }
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(197, 160, 89, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-navy-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-gold-500 selection:text-navy-950">
+
+    <!-- ============================================================== -->
+    <!-- HEADER BAR -->
+    <!-- ============================================================== -->
+    <header class="bg-navy-900/90 backdrop-blur-md border-b border-navy-800 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand & Crest -->
+            <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 flex items-center justify-center shadow-lg shadow-gold-500/20 border border-gold-300">
+                    <i data-lucide="crown" class="w-6 h-6 text-navy-950"></i>
+                </div>
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <span class="font-serif font-bold text-lg sm:text-2xl text-white tracking-wide leading-none">Grand Royale –</span>
+                        <span class="text-xs sm:text-sm text-gold-400 font-semibold tracking-wider uppercase">Smart Hotel Booking System</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Executive Management &amp; Security Control</p>
+                </div>
+            </div>
+
+            <!-- Top Right Controls -->
+            <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Brevo Status Pill -->
+                <div id="topBrevoStatus" class="hidden md:flex items-center gap-2 bg-navy-850 px-3 py-1.5 rounded-full border border-navy-700 text-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-slate-300 font-medium">Brevo Email Live</span>
+                </div>
+
+                <!-- Link to Guest Site -->
+                <a href="/" target="_blank" class="flex items-center gap-1.5 text-xs text-slate-300 hover:text-gold-400 px-3 py-1.5 rounded-lg bg-navy-850 hover:bg-navy-800 border border-navy-700 transition" title="Open Guest Booking Website">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-gold-500"></i>
+                    <span class="hidden sm:inline">Guest Website</span>
+                </a>
+
+                <!-- Admin User / Logout -->
+                <div id="adminUserSection" class="hidden flex items-center gap-2.5 pl-2 border-l border-navy-800">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-gold-600 to-gold-400 text-navy-950 flex items-center justify-center font-bold text-xs shadow">
+                        GM
+                    </div>
+                    <div class="hidden lg:block text-left">
+                        <p class="text-xs font-semibold text-white">General Manager</p>
+                        <p id="topAdminEmail" class="text-[10px] text-gold-400">gokulshankar9398@gmail.com</p>
+                    </div>
+                    <button type="button" id="adminLogoutBtn" class="ml-1 p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition" title="Sign Out of Admin Portal">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================== -->
+    <!-- MAIN CONTENT CONTAINER -->
+    <!-- ============================================================== -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ============================================================== -->
+        <!-- VIEW 1: AUTHENTICATION GATE (Shown if not logged in) -->
+        <!-- ============================================================== -->
+        <section id="authGateSection" class="flex items-center justify-center min-h-[70vh]">
+            <div class="w-full max-w-md glass-card rounded-2xl p-8 gold-glow relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <!-- Crest -->
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-gold-400 via-gold-500 to-gold-700 flex items-center justify-center shadow-xl shadow-gold-500/20 border border-gold-300 mb-3">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-navy-950"></i>
+                    </div>
+                    <h2 class="font-serif font-bold text-2xl text-white">Grand Royale –</h2>
+                    <h3 class="text-sm font-semibold text-gold-400 uppercase tracking-wider mt-0.5">Smart Hotel Booking System</h3>
+                    <p class="text-xs text-slate-400 mt-1">Executive Admin Access • Operations &amp; Security Control</p>
+                </div>
+
+                <!-- Tabs: Password vs Brevo Email OTP -->
+                <div class="flex border-b border-navy-700 mb-6 text-xs font-semibold">
+                    <button type="button" id="tabPasswordBtn" class="flex-1 pb-3 text-gold-400 border-b-2 border-gold-500 transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                        <span>Admin Password</span>
+                    </button>
+                    <button type="button" id="tabOtpBtn" class="flex-1 pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="mail-check" class="w-3.5 h-3.5"></i>
+                        <span>Brevo Email OTP</span>
+                    </button>
+                </div>
+
+                <!-- FORM 1: Password Login -->
+                <form id="passwordLoginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Admin Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+                            <input type="email" id="loginAdminEmail" value="gokulshankar9398@gmail.com" required class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Master Password</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+                            <input type="password" id="loginAdminPassword" value="admin123" required placeholder="Enter admin password" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition">
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-1">Default password configured in <code class="text-gold-400">.env</code>: <code class="text-slate-300">admin123</code></p>
+                    </div>
+                    <button type="submit" id="submitPasswordLoginBtn" class="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-950 font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                        <span>Sign In to Executive Portal</span>
+                    </button>
+                </form>
+
+                <!-- FORM 2: Brevo Email OTP Login -->
+                <form id="otpLoginForm" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Registered Admin Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+                            <input type="email" id="loginOtpEmail" value="gokulshankar9398@gmail.com" readonly class="w-full bg-navy-900/60 border border-navy-700 text-slate-300 rounded-xl pl-9 pr-3.5 py-2.5 text-xs focus:outline-none cursor-not-allowed">
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Send OTP -->
+                    <div id="otpSendBox">
+                        <button type="button" id="sendAdminOtpBtn" class="w-full bg-navy-800 hover:bg-navy-700 border border-gold-500/40 text-gold-400 font-semibold text-xs py-3 rounded-xl transition flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span>Send 6-Digit Passcode to My Email</span>
+                        </button>
+                        <p class="text-[11px] text-slate-400 mt-2 text-center">Delivered directly to your inbox via Brevo Transactional API</p>
+                    </div>
+
+                    <!-- Step 2: Enter & Verify OTP (hidden until dispatched) -->
+                    <div id="otpVerifyBox" class="hidden space-y-4">
+                        <div class="p-3 rounded-xl bg-gold-500/10 border border-gold-500/30 text-xs text-gold-300 flex items-start gap-2">
+                            <i data-lucide="info" class="w-4 h-4 text-gold-400 shrink-0 mt-0.5"></i>
+                            <span>Passcode dispatched! Check your Brevo-registered email inbox (or admin terminal).</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Enter 6-Digit Security Passcode</label>
+                            <input type="text" id="adminOtpInput" maxlength="6" placeholder="000000" class="w-full bg-navy-900 border border-gold-500 rounded-xl py-3 text-center text-xl font-mono tracking-widest text-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-500/30">
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span id="adminOtpTimer">Valid for 5:00</span>
+                            <button type="button" id="resendAdminOtpBtn" class="text-gold-400 hover:underline">Resend Code</button>
+                        </div>
+                        <button type="button" id="verifyAdminOtpBtn" class="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-950 font-bold text-xs py-3 rounded-xl transition shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i>
+                            <span>Verify Code &amp; Sign In</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Footer security notice -->
+                <div class="mt-6 pt-4 border-t border-navy-800 text-center text-[10px] text-slate-500 flex items-center justify-center gap-1.5">
+                    <i data-lucide="shield" class="w-3.5 h-3.5 text-gold-500"></i>
+                    <span>SHA-256 Passcode Protection • Zero Plaintext Exposure</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- VIEW 2: OPERATIONS DASHBOARD (Shown when logged in) -->
+        <!-- ============================================================== -->
+        <section id="dashboardSection" class="hidden space-y-8">
+
+            <!-- Top Welcome & Quick Actions -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-navy-800">
+                <div>
+                    <h1 class="font-serif font-bold text-2xl sm:text-3xl text-white">Grand Royale – Operations Command Center</h1>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">Smart Hotel Booking System • Real-time status of reservations, occupancy, and security.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="button" id="openNewBookingModalBtn" class="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-950 font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-gold-500/20 transition flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>New VIP Reservation</span>
+                    </button>
+                    <button type="button" id="testBrevoBtn" class="bg-navy-850 hover:bg-navy-800 text-slate-200 border border-navy-700 font-semibold text-xs px-3.5 py-2.5 rounded-xl transition flex items-center gap-2" title="Send a test email via Brevo to verify API">
+                        <i data-lucide="send" class="w-4 h-4 text-gold-500"></i>
+                        <span>Test Brevo API</span>
+                    </button>
+                    <button type="button" id="refreshDashboardBtn" class="p-2.5 bg-navy-850 hover:bg-navy-800 text-slate-300 rounded-xl border border-navy-700 transition" title="Refresh Live Data">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Metric Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Card 1: Total Revenue -->
+                <div class="glass-card rounded-2xl p-5 border-l-4 border-l-gold-500 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Revenue</span>
+                        <div class="w-9 h-9 rounded-xl bg-gold-500/10 text-gold-400 flex items-center justify-center">
+                            <i data-lucide="wallet" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiRevenue" class="text-2xl font-bold text-white font-serif">₹0</h3>
+                        <p id="kpiRevenueUSD" class="text-xs text-gold-400/90 font-medium mt-0.5">$0 USD</p>
+                    </div>
+                    <div class="mt-3 flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                        <span>Direct Luxury Bookings</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Total Bookings -->
+                <div class="glass-card rounded-2xl p-5 border-l-4 border-l-sky-500 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Bookings</span>
+                        <div class="w-9 h-9 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center">
+                            <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiBookings" class="text-2xl font-bold text-white font-serif">0</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Reservations on file</p>
+                    </div>
+                    <div class="mt-3 flex items-center gap-1.5 text-[11px] text-slate-400">
+                        <span id="kpiConfirmedCount" class="text-emerald-400 font-semibold">0 Confirmed</span>
+                        <span>•</span>
+                        <span id="kpiCancelledCount" class="text-rose-400 font-semibold">0 Cancelled</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Active / In-House Guests -->
+                <div class="glass-card rounded-2xl p-5 border-l-4 border-l-indigo-500 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Guests</span>
+                        <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiActiveGuests" class="text-2xl font-bold text-white font-serif">0</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Currently registered / arrived</p>
+                    </div>
+                    <div class="mt-3 flex items-center gap-1.5 text-[11px] text-indigo-400 font-medium">
+                        <i data-lucide="bed-double" class="w-3.5 h-3.5"></i>
+                        <span id="kpiCheckedInCount">0 In-House Checked-In</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Occupancy Rate -->
+                <div class="glass-card rounded-2xl p-5 border-l-4 border-l-emerald-500 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Suites Occupancy</span>
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                            <i data-lucide="hotel" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiOccupancy" class="text-2xl font-bold text-white font-serif">0%</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Capacity of 25 Luxury Suites</p>
+                    </div>
+                    <!-- Progress Bar -->
+                    <div class="mt-3 w-full bg-navy-900 rounded-full h-2 overflow-hidden border border-navy-700">
+                        <div id="occupancyProgressBar" class="bg-gradient-to-r from-emerald-500 to-gold-500 h-full rounded-full transition-all duration-700" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Navigation Tabs -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-navy-800">
+                <nav class="flex space-x-6 text-xs font-semibold">
+                    <button type="button" id="tabReservationsViewBtn" class="pb-3 text-gold-400 border-b-2 border-gold-500 transition flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <span>Reservations Manager</span>
+                    </button>
+                    <button type="button" id="tabOtpLogsViewBtn" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition flex items-center gap-2">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                        <span>Security &amp; OTP Logs</span>
+                        <span id="otpLogCountBadge" class="bg-navy-800 text-gold-400 text-[10px] px-2 py-0.5 rounded-full border border-navy-700">0</span>
+                    </button>
+                    <button type="button" id="tabGatewayViewBtn" class="pb-3 text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition flex items-center gap-2">
+                        <i data-lucide="server" class="w-4 h-4"></i>
+                        <span>System &amp; Email Gateway</span>
+                    </button>
+                </nav>
+
+                <!-- Search & Filters (for Reservations) -->
+                <div id="tableControls" class="flex flex-wrap items-center gap-3 pb-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5"></i>
+                        <input type="text" id="bookingSearchInput" placeholder="Search guests, suites, ref codes..." class="bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none w-56 sm:w-64">
+                    </div>
+                    <select id="statusFilterSelect" class="bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Statuses</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Checked-In">Checked-In</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- TAB VIEW 1: RESERVATIONS MANAGER TABLE -->
+            <!-- ============================================================== -->
+            <div id="reservationsView" class="space-y-4">
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-navy-900/80 border-b border-navy-800 text-[11px] uppercase font-bold text-slate-400 tracking-wider">
+                                    <th class="py-3.5 px-4">Booking Ref</th>
+                                    <th class="py-3.5 px-4">Guest Details</th>
+                                    <th class="py-3.5 px-4">Suite &amp; Guests</th>
+                                    <th class="py-3.5 px-4">Stay Duration</th>
+                                    <th class="py-3.5 px-4">Total &amp; Payment</th>
+                                    <th class="py-3.5 px-4">Status</th>
+                                    <th class="py-3.5 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody" class="divide-y divide-navy-800/60">
+                                <!-- Dynamic rows rendered via admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div id="noBookingsState" class="hidden text-center py-12">
+                        <i data-lucide="calendar-x" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+                        <h4 class="text-sm font-semibold text-slate-300">No Reservations Found</h4>
+                        <p class="text-xs text-slate-500 mt-1">Try adjusting your search filter or add a new VIP booking.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- TAB VIEW 2: SECURITY & OTP AUDIT LOGS -->
+            <!-- ============================================================== -->
+            <div id="otpLogsView" class="hidden space-y-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-serif font-bold text-lg text-white">Live OTP &amp; Security Dispatch Stream</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">Real-time log of guest logins, booking verification codes, and admin 2FA.</p>
+                        </div>
+                        <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                            Live Auditing
+                        </span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-navy-900/80 border-b border-navy-800 text-[11px] uppercase font-bold text-slate-400 tracking-wider">
+                                    <th class="py-3 px-4">Log ID</th>
+                                    <th class="py-3 px-4">Recipient Target</th>
+                                    <th class="py-3 px-4">Auth Channel</th>
+                                    <th class="py-3 px-4">Gateway Provider</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-right">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="otpLogsTableBody" class="divide-y divide-navy-800/60">
+                                <!-- Dynamic logs rendered via admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="noOtpLogsState" class="hidden text-center py-12">
+                        <i data-lucide="shield" class="w-10 h-10 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-xs text-slate-500">No security dispatch events recorded in this session yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- TAB VIEW 3: SYSTEM & EMAIL GATEWAY SETTINGS -->
+            <!-- ============================================================== -->
+            <div id="gatewayView" class="hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Brevo Gateway Info -->
+                    <div class="glass-card rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif font-bold text-base text-white">Brevo Transactional API</h4>
+                                <p class="text-xs text-slate-400">High-delivery email infrastructure for guest &amp; admin OTPs</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Gateway Status</span>
+                                <span class="text-emerald-400 font-semibold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    Active &amp; Connected
+                                </span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Verified Sender Email</span>
+                                <span id="gatewaySenderEmail" class="font-mono text-slate-200">gokulshankar9398@gmail.com</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Daily Free Quota</span>
+                                <span class="text-gold-400 font-semibold">300 Emails / Day</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Security Standard</span>
+                                <span class="text-slate-200">Zero OTPs in Client DOM</span>
+                            </div>
+                        </div>
+
+                        <button type="button" id="cardTestEmailBtn" class="w-full bg-navy-800 hover:bg-navy-700 text-gold-400 border border-gold-500/30 text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span>Send Live Test Verification Email</span>
+                        </button>
+                    </div>
+
+                    <!-- Server Environment -->
+                    <div class="glass-card rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center border border-purple-500/20">
+                                <i data-lucide="cpu" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif font-bold text-base text-white">Server Environment</h4>
+                                <p class="text-xs text-slate-400">Node.js Native Server Engine</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Port</span>
+                                <span class="font-mono text-slate-200">3000 (HTTP)</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Server Uptime</span>
+                                <span id="serverUptimeLabel" class="font-mono text-gold-400">0s</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Persistence Store</span>
+                                <span class="font-mono text-slate-200">bookings.json</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-navy-800">
+                                <span class="text-slate-400">Admin Authority</span>
+                                <span id="serverAdminEmail" class="font-mono text-slate-200">gokulshankar9398@gmail.com</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-navy-900 rounded-xl border border-navy-800 text-[11px] text-slate-400 flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                            <span>All guest bookings and manual VIP entries are automatically written to <code class="text-gold-400">bookings.json</code>.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: CREATE NEW VIP RESERVATION -->
+    <!-- ============================================================== -->
+    <div id="newBookingModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-sm">
+        <div class="glass-card rounded-2xl w-full max-w-lg p-6 sm:p-8 gold-glow relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-navy-800 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center border border-gold-500/30">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif font-bold text-lg text-white">Create VIP Reservation</h3>
+                        <p class="text-xs text-slate-400">Direct concierge phone or executive walk-in entry</p>
+                    </div>
+                </div>
+                <button type="button" id="closeNewBookingModalBtn" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-navy-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="newBookingForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Guest Full Name *</label>
+                        <input type="text" id="nbGuestName" required placeholder="e.g. Duke William Kensington" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Guest Email *</label>
+                        <input type="email" id="nbGuestEmail" required placeholder="guest@domain.com" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Guest Phone</label>
+                        <input type="tel" id="nbGuestPhone" placeholder="+91 93986 48195" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Select Luxury Suite *</label>
+                        <select id="nbRoomTitle" required class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="The Royal Penthouse Suite">The Royal Penthouse Suite ($3,500/nt)</option>
+                            <option value="Presidential Palace Suite">Presidential Palace Suite ($2,250/nt)</option>
+                            <option value="Ambassador Oceanfront Villa">Ambassador Oceanfront Villa ($1,800/nt)</option>
+                            <option value="Grand Imperial Signature Suite">Grand Imperial Signature Suite ($1,250/nt)</option>
+                            <option value="Azure Lagoon Pool Villa">Azure Lagoon Pool Villa ($950/nt)</option>
+                            <option value="Executive Horizon Club Suite">Executive Horizon Club Suite ($750/nt)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Check-In *</label>
+                        <input type="date" id="nbCheckIn" required class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Check-Out *</label>
+                        <input type="date" id="nbCheckOut" required class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Guests</label>
+                        <select id="nbGuests" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="1 Guest">1 Guest</option>
+                            <option value="2 Guests" selected>2 Guests</option>
+                            <option value="3 Guests">3 Guests</option>
+                            <option value="4+ Guests">4+ Guests</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Grand Total (Formatted) *</label>
+                        <input type="text" id="nbGrandTotal" required placeholder="e.g. ₹4,50,000" value="₹4,50,000" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Payment Method</label>
+                        <select id="nbPaymentMethod" class="w-full bg-navy-900 border border-navy-700 focus:border-gold-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="VIP Concierge Wire">VIP Concierge Wire</option>
+                            <option value="Credit Card (Visa Platinum)">Credit Card (Visa Platinum)</option>
+                            <option value="Apple Pay">Apple Pay</option>
+                            <option value="Pay on Arrival">Pay on Arrival</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-navy-800 flex items-center justify-end gap-3">
+                    <button type="button" id="cancelNewBookingBtn" class="px-4 py-2 text-xs text-slate-400 hover:text-white rounded-xl hover:bg-navy-800 transition">Cancel</button>
+                    <button type="submit" id="saveNewBookingBtn" class="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-950 font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-gold-500/20 flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Save &amp; Confirm VIP Booking</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <!-- ============================================================== -->
+    <div id="adminToastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Admin JS Application Script -->
+    <script src="admin.js?v=3"></script>
+</body>
+</html>

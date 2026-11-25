@@ -1,0 +1,28 @@
+{
+  "callmebot": {
+    "apiKey": ""
+  },
+  "fast2sms": {
+    "apiKey": ""
+  },
+  "twilio": {
+    "accountSid": "",
+    "authToken": "",
+    "fromPhone": ""
+  },
+  "textbelt": {
+    "apiKey": "textbelt"
+  },
+  "email": {
+    "service": "gmail",
+    "resendApiKey": "",
+    "from": "",
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "user": "",
+      "pass": "",
+      "from": ""
+    }
+  }
+}

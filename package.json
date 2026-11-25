@@ -1,0 +1,14 @@
+{
+  "name": "grand-royale-hotel",
+  "version": "1.0.0",
+  "description": "Grand Royale – Smart Hotel Booking System with Email OTP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test-otp-flow.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.9.16"
+  }
+}

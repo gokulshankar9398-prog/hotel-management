@@ -1,0 +1,50 @@
+[
+  {
+    "id": "GR-892104",
+    "guestName": "Lady Victoria Sterling",
+    "guestEmail": "victoria.sterling@royaltravel.co.uk",
+    "guestPhone": "+44 7911 123456",
+    "roomTitle": "The Royal Penthouse Suite",
+    "checkIn": "2026-12-01",
+    "checkOut": "2026-12-05",
+    "nights": 4,
+    "guests": "2 Adults",
+    "grandTotalUSD": 14000,
+    "grandTotalFormatted": "₹11,62,000",
+    "paymentMethod": "Credit Card (Visa Platinum)",
+    "status": "Confirmed",
+    "bookedAt": "25/11/2026"
+  },
+  {
+    "id": "GR-451928",
+    "guestName": "Archduke Maximilian Vance",
+    "guestEmail": "max.vance@dynasty.com",
+    "guestPhone": "+1 (555) 342-9988",
+    "roomTitle": "Presidential Palace Suite",
+    "checkIn": "2026-12-03",
+    "checkOut": "2026-12-08",
+    "nights": 5,
+    "guests": "2 Adults, 1 Child",
+    "grandTotalUSD": 11250,
+    "grandTotalFormatted": "₹9,33,750",
+    "paymentMethod": "Concierge Bank Wire",
+    "status": "Checked-In",
+    "bookedAt": "24/11/2026"
+  },
+  {
+    "id": "GR-782310",
+    "guestName": "Baroness Evelyn Montgomery",
+    "guestEmail": "evelyn.m@montgomeryestate.com",
+    "guestPhone": "+33 6 12 34 56 78",
+    "roomTitle": "Ambassador Oceanfront Villa",
+    "checkIn": "2026-11-28",
+    "checkOut": "2026-12-02",
+    "nights": 4,
+    "guests": "2 Adults",
+    "grandTotalUSD": 7200,
+    "grandTotalFormatted": "₹5,97,600",
+    "paymentMethod": "Apple Pay",
+    "status": "Confirmed",
+    "bookedAt": "24/11/2026"
+  }
+]
