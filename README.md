@@ -1,5 +1,11 @@
 # 🏰 Grand Royale – Smart Hotel Booking System
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-00c7b7?style=for-the-badge&logo=render&logoColor=white)](https://grand-royale-hotel.onrender.com)
+[![Admin Portal](https://img.shields.io/badge/Admin%20Portal-Live-C5A059?style=for-the-badge&logo=shield&logoColor=white)](https://grand-royale-hotel.onrender.com/admin)
+
+> 🌐 **Live Web Application:** [https://grand-royale-hotel.onrender.com](https://grand-royale-hotel.onrender.com)  
+> 👑 **Executive Admin Command Center:** [https://grand-royale-hotel.onrender.com/admin](https://grand-royale-hotel.onrender.com/admin)
+
 A modern, responsive, 5-star hotel & resort booking web application designed with high aesthetic standards, interactive room catalogs, dynamic pricing, live checkout calculation, and reservation management.
 
 ---
