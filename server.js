@@ -1838,10 +1838,10 @@ const server = http.createServer((req, res) => {
     });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
     console.log(`\n===============================================================`);
-    console.log(`🏰 Grand Royale – Smart Hotel Booking System - Local Server Started`);
-    console.log(`📍 Web Application: http://localhost:${PORT}`);
+    console.log(`🏰 Grand Royale – Smart Hotel Booking System - Server Running`);
+    console.log(`📍 Web Application: http://0.0.0.0:${PORT}`);
     console.log(`🔒 Security: Zero OTP codes displayed on web page`);
     console.log(`📲 Real SMS Support: Twilio & Fast2SMS Ready in config.json`);
     console.log(`===============================================================\n`);
