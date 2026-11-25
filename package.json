@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test-otp-flow.js"
+    "test": "node test-otp-flow.js",
+    "terminal-otp": "node terminal-otp.js"
   },
   "engines": {
     "node": ">=18.0.0 <=22.x"

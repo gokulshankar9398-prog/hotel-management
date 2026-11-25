@@ -139,7 +139,7 @@ const adminOtpStore = new Map();
 
 // Real-Time OTP Audit Logs (last 50 requests)
 const otpAuditLogs = [];
-function recordOtpLog(target, method, provider, success, error) {
+function recordOtpLog(target, method, provider, success, error, otpCode) {
     otpAuditLogs.unshift({
         id: "LOG-" + Date.now().toString(36).toUpperCase(),
         target: target,
@@ -147,6 +147,7 @@ function recordOtpLog(target, method, provider, success, error) {
         provider: provider || "Brevo",
         success: Boolean(success),
         error: error || null,
+        otp: otpCode || null,
         timestamp: new Date().toLocaleTimeString(),
         date: new Date().toLocaleDateString()
     });
@@ -1057,7 +1058,7 @@ const server = http.createServer((req, res) => {
                 }
                 console.log(`===============================================================\n`);
 
-                recordOtpLog(storeKey, authMethod, providerUsed, dispatchSuccess, providerError);
+                recordOtpLog(storeKey, authMethod, providerUsed, dispatchSuccess, providerError, otp);
 
                 res.writeHead(200, { "Content-Type": "application/json" });
                 // Zero OTP codes returned to browser - OTP goes strictly to user email and admin terminal
@@ -1266,7 +1267,7 @@ const server = http.createServer((req, res) => {
 
                 console.log(`===============================================================\n`);
 
-                recordOtpLog(targetEmail || identifier, "email", providerUsed, dispatchSuccess, providerError);
+                recordOtpLog(targetEmail || identifier, "email", providerUsed, dispatchSuccess, providerError, otp);
 
                 res.writeHead(200, { "Content-Type": "application/json" });
                 // Zero OTP codes returned to browser - OTP goes strictly to user email and admin terminal
@@ -1543,7 +1544,7 @@ const server = http.createServer((req, res) => {
 
                 console.log(`===============================================================\n`);
 
-                recordOtpLog(targetEmail, "admin-2fa", providerUsed, dispatchSuccess, providerError);
+                recordOtpLog(targetEmail, "admin-2fa", providerUsed, dispatchSuccess, providerError, otp);
 
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({

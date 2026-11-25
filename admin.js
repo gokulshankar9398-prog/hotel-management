@@ -430,6 +430,7 @@
                 <tr class="hover:bg-navy-900/50 transition">
                     <td class="py-3 px-4 font-mono text-slate-400">${log.id}</td>
                     <td class="py-3 px-4 font-medium text-white">${log.target}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-amber-300"><span class="bg-amber-400/10 border border-amber-400/30 px-2 py-0.5 rounded tracking-widest">[ ${log.otp || '●●●●●●'} ]</span></td>
                     <td class="py-3 px-4 capitalize text-slate-300">${log.method}</td>
                     <td class="py-3 px-4 text-gold-400 font-semibold">${log.provider}</td>
                     <td class="py-3 px-4">${statusBadge}</td>
