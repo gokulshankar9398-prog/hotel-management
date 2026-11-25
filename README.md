@@ -29,7 +29,7 @@ A modern, responsive, 5-star hotel & resort booking web application designed wit
      - 🚗 Airport VIP Limousine Pickup (+$95 one-time)
      - 💆 Couple's 60-min Aromatherapy Spa (+$180)
    - Real-time tax (12%) and grand total breakdown.
-   - Instant booking confirmation modal with generated reference code (e.g. `AUR-784920`).
+   - Instant booking confirmation modal with generated reference code (e.g. `GR-784920`).
    - Printable reservation voucher trigger.
 
 5. **"My Trips" Saved Reservations Management**:
