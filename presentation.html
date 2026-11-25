@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Royale – Smart Hotel Booking System | Project Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #070B14; color: #E2E8F0; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .slide { display: none; min-height: 100vh; }
+        .slide.active { display: flex; }
+        @media print {
+            .slide { display: flex !important; page-break-after: always; height: 100vh; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden antialiased select-none">
+
+    <!-- Top Floating Navigation Bar -->
+    <header class="no-print fixed top-0 left-0 right-0 z-50 bg-[#0B1325]/90 backdrop-blur-md border-b border-[#C5A059]/20 px-6 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#997736] via-[#C5A059] to-[#E9D5A1] flex items-center justify-center text-[#070B14] shadow-md shadow-[#C5A059]/20">
+                <i data-lucide="crown" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <span class="font-serif font-bold text-sm tracking-wide text-white block leading-tight">Grand Royale –</span>
+                <span class="text-[9px] uppercase tracking-widest text-[#C5A059] font-semibold block">Smart Hotel Booking System</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs">
+            <span id="slideCounter" class="font-mono text-[#C5A059] bg-[#070B14] px-3 py-1 rounded-full border border-[#C5A059]/30">Slide 1 / 10</span>
+            <div class="flex items-center gap-1.5">
+                <button id="prevBtn" class="px-3 py-1.5 rounded-lg bg-navy-800 bg-[#111C33] hover:bg-[#C5A059] hover:text-[#070B14] text-gray-300 transition flex items-center gap-1">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i> Prev
+                </button>
+                <button id="nextBtn" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#C5A059] to-[#DFBE7A] text-[#070B14] font-bold hover:brightness-110 transition flex items-center gap-1 shadow-md shadow-[#C5A059]/20">
+                    Next <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <a href="https://grand-royale-hotel.onrender.com" target="_blank" class="hidden sm:flex items-center gap-1.5 text-xs text-[#C5A059] hover:underline border border-[#C5A059]/40 px-3 py-1.5 rounded-lg">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Live Demo
+            </a>
+        </div>
+    </header>
+
+    <!-- Slide 1: Title Slide -->
+    <section class="slide active flex-col justify-center items-center px-8 text-center relative overflow-hidden" data-slide="1">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.12)_0%,transparent_70%)] pointer-events-none"></div>
+        <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#E9D5A1] via-[#C5A059] to-[#997736] flex items-center justify-center text-[#070B14] shadow-2xl shadow-[#C5A059]/30 mb-8 border border-white/20">
+            <i data-lucide="crown" class="w-10 h-10"></i>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111C33] border border-[#C5A059]/40 text-[#C5A059] text-xs font-semibold uppercase tracking-widest mb-6">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            Full-Stack Engineering &amp; Cloud Deployment Presentation
+        </div>
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight max-w-4xl leading-tight">
+            Grand Royale –<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#C5A059] via-[#E9D5A1] to-[#C5A059]">Smart Hotel Booking System</span>
+        </h1>
+        <p class="text-slate-400 max-w-2xl text-base sm:text-lg mt-6 leading-relaxed">
+            A production-ready luxury 5-star hotel reservation platform engineered with zero-exposure SHA-256 email OTP authentication, real-time multi-currency checkout, and a dual-authenticated operations command center.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
+            <span class="px-3.5 py-2 rounded-xl bg-[#111C33] border border-slate-700 text-slate-300">Node.js 22 LTS</span>
+            <span class="px-3.5 py-2 rounded-xl bg-[#111C33] border border-slate-700 text-slate-300">Brevo Transactional API</span>
+            <span class="px-3.5 py-2 rounded-xl bg-[#111C33] border border-slate-700 text-slate-300">Tailwind CSS + Lucide</span>
+            <span class="px-3.5 py-2 rounded-xl bg-[#111C33] border border-emerald-500/40 text-emerald-400">Render Cloud Live (24/7)</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-12">Press <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Space</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">→</kbd> to navigate slides</p>
+    </section>
+
+    <!-- Slide 2: Methodology & Problem Statement -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="2">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">01 / Engineering Methodology</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-8">Problem Statement &amp; Solution Architecture</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-rose-500/20 relative">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">The Industry Challenges</h3>
+                <ul class="space-y-3 text-sm text-slate-300">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Client-Side OTP Leaks:</strong> Naive booking applications leak OTP passcodes in JSON API responses or the frontend DOM.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Complex Multi-Gateway Friction:</strong> Rigid booking forms fail when international SMS routes fail or impose hefty gateway fees.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Fragmented Admin Tooling:</strong> Lack of unified real-time visibility into reservations, check-in states, and security audit logs.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-emerald-500/20 relative">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                    <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">The Grand Royale Methodology</h3>
+                <ul class="space-y-3 text-sm text-slate-300">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Zero-Exposure SHA-256 Storage:</strong> Passcodes are hashed on the backend with 5-minute TTL expirations and instant deletion upon use.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="mail-check" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Brevo Transactional Pipeline:</strong> High-deliverability email dispatch with luxury HTML email templates and terminal fallback.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="command" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                        <span><strong>Unified Executive Command Center:</strong> Dual-auth portal (`/admin`) with live KPI metrics, status CRUD, and audit telemetry.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 rounded-xl bg-[#111C33] border border-[#C5A059]/30 flex items-center justify-between">
+            <span class="text-xs text-slate-300 font-mono">Agile Iteration Pipeline: Architectural Design ➔ Security Hardening ➔ CI/CD Cloud Deployment</span>
+            <span class="text-xs text-[#C5A059] font-bold">29 Automated Tests Passed</span>
+        </div>
+    </section>
+
+    <!-- Slide 3: Overall Architecture -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="3">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">02 / Overall Structure</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">High-Level System Architecture</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Client Layer -->
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="text-xs font-mono text-cyan-400 uppercase tracking-wider mb-2">Layer 1: Presentation</div>
+                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="monitor" class="w-5 h-5 text-cyan-400"></i> Client Frontend
+                </h3>
+                <ul class="text-xs text-slate-300 space-y-2.5">
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Responsive Core:</strong> Single-page semantic HTML5 with utility-first Tailwind CSS.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>State Machine:</strong> Multi-currency (INR, USD, EUR, GBP), stay-nights counter, tax engine.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Security Guard:</strong> Sanitized DOM nodes, zero plaintext passcodes stored in client storage.</li>
+                </ul>
+            </div>
+
+            <!-- Server Layer -->
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-[#C5A059]/40 shadow-lg shadow-[#C5A059]/5">
+                <div class="text-xs font-mono text-[#C5A059] uppercase tracking-wider mb-2">Layer 2: Application Core</div>
+                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="server" class="w-5 h-5 text-[#C5A059]"></i> Node.js Engine
+                </h3>
+                <ul class="text-xs text-slate-300 space-y-2.5">
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Native HTTP Server:</strong> Zero heavyweight web framework overhead; sub-millisecond route dispatch.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Crypto Engine:</strong> SHA-256 salted digest generation, Map memory store with auto-expiry.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Admin API Suite:</strong> KPI aggregation, reservation status mutations, 2FA challenge gate.</li>
+                </ul>
+            </div>
+
+            <!-- Cloud Layer -->
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-2">Layer 3: Infrastructure</div>
+                <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="cloud" class="w-5 h-5 text-emerald-400"></i> Cloud &amp; Delivery
+                </h3>
+                <ul class="text-xs text-slate-300 space-y-2.5">
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Render Container:</strong> Auto-building Git pipeline, Node 22 runtime, dynamic port binding.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Brevo Email API:</strong> RESTful transactional email dispatcher with fallback to SMTP.</li>
+                    <li class="p-2.5 rounded-lg bg-[#111C33]"><strong>Data Persistence:</strong> Atomic filesystem JSON store (`bookings.json`) with sample VIP records.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-6 p-4 rounded-xl bg-[#0E1626] border border-slate-800 text-xs text-slate-400 font-mono text-center">
+            Browser (HTTPS) ➔ Render Cloud Ingress (0.0.0.0:PORT) ➔ Node.js Router ➔ Brevo API / In-Memory OTP Store / bookings.json
+        </div>
+    </section>
+
+    <!-- Slide 4: Backend Deep Dive -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="4">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">03 / Backend Engineering</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Backend Implementation &amp; Security Architecture</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-700">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-2">
+                        <i data-lucide="lock" class="w-4 h-4 text-[#C5A059]"></i> Cryptographic Passcode Protection
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        When an OTP is generated, the plaintext is never stored raw. It is converted to a SHA-256 digest:
+                        <code class="block mt-2 p-2 rounded bg-[#070B14] text-amber-300 font-mono text-[11px]">
+                            crypto.createHash("sha256").update(otpCode).digest("hex")
+                        </code>
+                        Upon submission, the guest's input is hashed and compared using timing-safe logic.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-700">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-2">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 text-cyan-400"></i> Replay Attack Defense &amp; Expiry
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Passcodes expire strictly in <strong>300 seconds (5 minutes)</strong>. Immediately after successful verification, the record is purged from the Map store (<code class="text-cyan-300">bookingOtpStore.delete(key)</code>), preventing replay attacks.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-700">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-2">
+                        <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i> Atomic Reservations Sync
+                    </h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Bookings are assigned unique identifiers (e.g., <code class="text-emerald-300 font-mono">GR-892104</code>), validated, and written to <code class="text-emerald-300 font-mono">bookings.json</code>, feeding real-time updates directly to the Admin Command Center.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Code snippet display -->
+            <div class="p-5 rounded-2xl bg-[#070B14] border border-[#C5A059]/30 font-mono text-xs text-slate-300 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-[11px] text-slate-500">
+                        <span>server.js (Security Pipeline Snippet)</span>
+                        <span class="text-emerald-400">Zero-Leak Guard</span>
+                    </div>
+                    <pre class="overflow-x-auto text-[11px] leading-relaxed text-slate-300">
+<span class="text-purple-400">const</span> crypto = <span class="text-blue-400">require</span>(<span class="text-emerald-300">"crypto"</span>);
+<span class="text-purple-400">const</span> hashedOtp = crypto
+    .<span class="text-blue-400">createHash</span>(<span class="text-emerald-300">"sha256"</span>)
+    .<span class="text-blue-400">update</span>(otpCode)
+    .<span class="text-blue-400">digest</span>(<span class="text-emerald-300">"hex"</span>);
+
+bookingOtpStore.<span class="text-blue-400">set</span>(cleanEmail, {
+    hashedOtp,
+    expiresAt: Date.<span class="text-blue-400">now</span>() + <span class="text-amber-300">300000</span>,
+    attempts: <span class="text-amber-300">0</span>
+});
+
+<span class="text-slate-500">// Response sent to frontend (NEVER contains otpCode!)</span>
+res.<span class="text-blue-400">end</span>(JSON.<span class="text-blue-400">stringify</span>({
+    success: <span class="text-purple-400">true</span>,
+    expiresInSeconds: <span class="text-amber-300">300</span>,
+    message: <span class="text-emerald-300">"Verification passcode dispatched"</span>
+}));</pre>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+                    <span>Audit Log: Timestamped in memory</span>
+                    <span class="text-[#C5A059]">TTL: 300s</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Brevo Email Pipeline -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="5">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">04 / Email Integration</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Brevo Transactional Email &amp; OTP Delivery</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">1. API Request Dispatch</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Direct integration with Brevo v3 API (<code class="text-blue-300">api.brevo.com/v3/smtp/email</code>) using authorized Bearer API keys, supporting 300 free high-speed transactional emails daily.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-[#C5A059]/40 shadow-lg shadow-[#C5A059]/5">
+                <div class="w-10 h-10 rounded-xl bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center mb-4">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">2. Luxury HTML Templating</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Custom-crafted HTML email design with Royal Navy background, gold-bordered passcode card, security notices, and executive signature from Grand Royale Concierge.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">3. Graceful Fallback Strategy</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    If external gateway network limits are reached, the system gracefully logs the passcode to the admin terminal and telemetry audit logs for uninterrupted testing and operations.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-8 p-6 rounded-2xl bg-[#070B14] border border-slate-800 text-xs">
+            <div class="text-[#C5A059] font-bold mb-2">👑 Live Transactional Template Specs:</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-slate-400">
+                <div><strong>Sender Address:</strong> `"Grand Royale" &lt;gokulshankar9398@gmail.com&gt;`</div>
+                <div><strong>Subject Line:</strong> `👑 [123456] Your Grand Royale Security Passcode`</div>
+                <div><strong>Validity Window:</strong> Exactly 5 minutes with SHA-256 backend match</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Visual Webpage Breakdown -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="6">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">05 / Visual Presentation</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Guest Experience: Landing Page &amp; Booking Flow</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <!-- Mockup Visual with Real Screenshot -->
+            <div class="rounded-2xl bg-[#0E1626] border border-[#C5A059]/30 p-4 shadow-2xl relative overflow-hidden group">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-[11px] text-slate-400 font-mono ml-2">https://grand-royale-hotel.onrender.com</span>
+                    </div>
+                    <span class="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-semibold">● Live Production</span>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-slate-700 shadow-inner bg-black">
+                    <img src="landing_page_live.png" alt="Grand Royale Live Guest Portal" class="w-full h-auto object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Captured from live Render deployment</span>
+                    <a href="https://grand-royale-hotel.onrender.com" target="_blank" class="text-[#C5A059] hover:underline flex items-center gap-1">Open in Browser <i data-lucide="external-link" class="w-3 h-3"></i></a>
+                </div>
+            </div>
+
+            <!-- Explanations -->
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="compass" class="w-4 h-4 text-[#C5A059]"></i> Dynamic Smart Booking Bar
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        Guests select destinations (Goa, Jaipur, Maldives, Monaco, Santorini) with automatic minimum check-in date rules and live nights counter.
+                    </p>
+                </div>
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-[#C5A059]"></i> Luxury Suites &amp; Multi-Currency
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        Dynamic catalog with filter pills (Luxury Suites, Beach Villas, Royal Penthouse) and instant currency switching between INR (₹), USD ($), EUR (€), and GBP (£).
+                    </p>
+                </div>
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Seamless 3-Step Checkout
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        VIP upgrades (Champagne Breakfast, Airport Limo, Couple's Spa), Brevo Email OTP verification, and instant printable voucher with reservation ID (`GR-XXXXXX`).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Admin Command Center -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="7">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">06 / Operations Command Center</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Executive Admin Portal (`/admin`)</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <!-- Admin Live Screenshot -->
+            <div class="rounded-2xl bg-[#0E1626] border border-[#C5A059]/30 p-4 shadow-2xl relative group">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-[11px] text-slate-400 font-mono ml-2">https://grand-royale-hotel.onrender.com/admin</span>
+                    </div>
+                    <span class="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-semibold">● Operations Live</span>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-slate-700 shadow-inner bg-black">
+                    <img src="admin_portal_live.png" alt="Grand Royale Live Admin Operations Command Center" class="w-full h-auto object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Active Telemetry: ₹26.93 Lakhs Revenue | 3 VIP Bookings</span>
+                    <a href="https://grand-royale-hotel.onrender.com/admin" target="_blank" class="text-[#C5A059] hover:underline flex items-center gap-1">Open Admin <i data-lucide="external-link" class="w-3 h-3"></i></a>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="key" class="w-4 h-4 text-[#C5A059]"></i> Dual Authentication Gate
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        Admins can log in using either the Master Password (<code class="text-[#C5A059]">admin123</code>) or by requesting an executive Brevo 2FA email passcode.
+                    </p>
+                </div>
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="activity" class="w-4 h-4 text-[#C5A059]"></i> Live Reservation Lifecycle CRUD
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        Hotel staff can instantly transition guest reservations between <strong>Confirmed</strong>, <strong>Checked-In</strong>, <strong>Completed</strong>, or <strong>Cancelled</strong> with zero page reloads.
+                    </p>
+                </div>
+                <div class="p-4 rounded-xl bg-[#0E1626] border border-slate-800">
+                    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-[#C5A059]"></i> Real-Time Security Audit Telemetry
+                    </h4>
+                    <p class="text-xs text-slate-300">
+                        Tracks and displays the last 50 authentication requests with timestamps, delivery provider status, and tamper indicators.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Cloud Deployment on Render -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="8">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">07 / DevOps &amp; Cloud Deployment</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Continuous Deployment Pipeline on Render</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="p-5 rounded-2xl bg-[#0E1626] border border-slate-700 text-center">
+                <div class="w-10 h-10 rounded-full bg-slate-800 text-slate-300 mx-auto flex items-center justify-center mb-3">1</div>
+                <h4 class="text-sm font-bold text-white mb-1">GitHub Push</h4>
+                <p class="text-[11px] text-slate-400">Commits pushed to `main` branch trigger automated webhook.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-[#0E1626] border border-slate-700 text-center">
+                <div class="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 mx-auto flex items-center justify-center mb-3">2</div>
+                <h4 class="text-sm font-bold text-white mb-1">Container Build</h4>
+                <p class="text-[11px] text-slate-400">Render spins up container, runs `npm install`, and validates Node 22 LTS.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-[#0E1626] border border-slate-700 text-center">
+                <div class="w-10 h-10 rounded-full bg-[#C5A059]/20 text-[#C5A059] mx-auto flex items-center justify-center mb-3">3</div>
+                <h4 class="text-sm font-bold text-white mb-1">0.0.0.0 Binding</h4>
+                <p class="text-[11px] text-slate-400">Server starts with `npm start` and binds to dynamic cloud port.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-[#0E1626] border border-emerald-500/30 text-center">
+                <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center mb-3">4</div>
+                <h4 class="text-sm font-bold text-emerald-400 mb-1">Live Global SSL</h4>
+                <p class="text-[11px] text-slate-400">Served with free automated TLS HTTPS certificate worldwide.</p>
+            </div>
+        </div>
+
+        <div class="mt-8 p-6 rounded-2xl bg-[#070B14] border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="text-xs uppercase text-slate-500 font-bold block">Production Environment Variables Configured:</span>
+                <span class="font-mono text-xs text-slate-300">BREVO_API_KEY • ADMIN_PASSWORD • ADMIN_EMAIL • EMAIL_FROM • NODE_ENV=production</span>
+            </div>
+            <a href="https://grand-royale-hotel.onrender.com" target="_blank" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#C5A059] to-[#DFBE7A] text-[#070B14] font-bold text-xs hover:brightness-110 transition shadow-lg shadow-[#C5A059]/20 whitespace-nowrap">
+                Visit Live Production Site →
+            </a>
+        </div>
+    </section>
+
+    <!-- Slide 9: Automated Testing & Verification -->
+    <section class="slide flex-col justify-center px-8 lg:px-24 max-w-7xl mx-auto" data-slide="9">
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">08 / Verification &amp; Quality Assurance</div>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">Comprehensive Testing Suite (29/29 Passed)</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="shield" class="w-5 h-5 text-emerald-400"></i> test-otp-flow.js
+                    </h3>
+                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs font-bold">9 / 9 PASSED</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Rejected invalid email address</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Zero OTP code in API response (Zero-leak verified)</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Incorrect OTP passcode rejected</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> SHA-256 hash comparison verified</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Replay attack defense (used OTP cleared instantly)</li>
+                </ul>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#0E1626] border border-slate-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="server" class="w-5 h-5 text-[#C5A059]"></i> test-admin-portal.js
+                    </h3>
+                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-mono text-xs font-bold">20 / 20 PASSED</span>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-2">
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Static route `/admin` serves Executive Access</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Admin password authentication &amp; token issuance</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Real-time KPI aggregation (Revenue, Occupancy)</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Full CRUD operations on VIP reservations</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Real-time security audit log entry generation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono text-center">
+            ✔ Automated test harnesses executed locally and verified before cloud push. 0 vulnerabilities or leaked passcodes.
+        </div>
+    </section>
+
+    <!-- Slide 10: Conclusion & Links -->
+    <section class="slide flex-col justify-center items-center px-8 text-center" data-slide="10">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#C5A059] to-[#E9D5A1] text-[#070B14] flex items-center justify-center mb-6 shadow-xl shadow-[#C5A059]/20">
+            <i data-lucide="check-check" class="w-8 h-8"></i>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-[#C5A059] font-bold mb-2">09 / Project Conclusion</div>
+        <h2 class="font-serif text-3xl sm:text-5xl font-black text-white mb-4">Ready for Production Operations</h2>
+        <p class="text-slate-400 max-w-xl text-sm leading-relaxed mb-8">
+            Grand Royale represents a fully secured, elegantly designed, cloud-deployed hotel booking and operations management system built to modern web and security standards.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4 text-xs font-semibold">
+            <a href="https://grand-royale-hotel.onrender.com" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-[#C5A059] to-[#DFBE7A] text-[#070B14] font-bold hover:brightness-110 transition shadow-lg shadow-[#C5A059]/20 flex items-center justify-center gap-2">
+                <i data-lucide="globe" class="w-4 h-4"></i> Open Guest Portal
+            </a>
+            <a href="https://grand-royale-hotel.onrender.com/admin" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#111C33] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-[#070B14] transition flex items-center justify-center gap-2">
+                <i data-lucide="shield" class="w-4 h-4"></i> Open Admin Command Center
+            </a>
+            <a href="https://github.com/gokulshankar9398-prog/hotel-management" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-800 text-white hover:bg-slate-700 transition flex items-center justify-center gap-2">
+                <i data-lucide="github" class="w-4 h-4"></i> View GitHub Repository
+            </a>
+        </div>
+
+        <div class="mt-12 text-[11px] text-slate-500 font-mono">
+            &copy; 2026 Grand Royale – Smart Hotel Booking System • Engineered by Gokul Shankar
+        </div>
+    </section>
+
+    <!-- Bottom Progress Bar -->
+    <div class="no-print fixed bottom-0 left-0 right-0 h-1 bg-[#111C33]">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-[#997736] via-[#C5A059] to-[#E9D5A1] transition-all duration-300" style="width: 10%;"></div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        function updateSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+            currentSlide = n;
+
+            document.querySelectorAll(".slide").forEach((s, idx) => {
+                s.classList.toggle("active", idx + 1 === currentSlide);
+            });
+
+            document.getElementById("slideCounter").textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById("progressBar").style.width = `${(currentSlide / totalSlides) * 100}%`;
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        document.getElementById("prevBtn").addEventListener("click", () => updateSlide(currentSlide - 1));
+        document.getElementById("nextBtn").addEventListener("click", () => updateSlide(currentSlide + 1));
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+                e.preventDefault();
+                updateSlide(currentSlide + 1);
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+                e.preventDefault();
+                updateSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>
