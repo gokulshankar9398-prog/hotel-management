@@ -410,8 +410,8 @@ const authState = {
     resendSeconds: 30
 };
 
-// Backend API Base URL (Works seamlessly from both http://localhost:3000 and file:/// URLs)
-const API_BASE = (typeof window !== "undefined" && (window.location.protocol === "file:" || window.location.port !== "3000")) ? "http://localhost:3000" : "";
+// Backend API Base URL (Works seamlessly from both web servers and local file:/// URLs)
+const API_BASE = (typeof window !== "undefined" && window.location.protocol === "file:") ? "http://localhost:3000" : "";
 
 // Safe DOM Helper Utilities
 const getEl = (id) => document.getElementById(id);
