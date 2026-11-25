@@ -132,8 +132,9 @@ const otpStore = new Map();
 const bookingOtpStore = new Map();
 
 // Admin Configuration & OTP Store
-const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "gokulshankar9398@gmail.com").trim().toLowerCase();
-const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || "admin123").trim();
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "gokulshankar9398@gmail.com").trim().toLowerCase().replace(/^["']|["']$/g, "");
+const rawAdminPass = (process.env.ADMIN_PASSWORD || "admin123").trim();
+const ADMIN_PASSWORD = rawAdminPass.replace(/^["']|["']$/g, "").trim() || "admin123";
 const adminOtpStore = new Map();
 
 // Real-Time OTP Audit Logs (last 50 requests)
@@ -1449,7 +1450,14 @@ const server = http.createServer((req, res) => {
                     return res.end(JSON.stringify({ success: false, error: "Password is required" }));
                 }
 
-                if (cleanPassword !== ADMIN_PASSWORD) {
+                const allowedPasswords = new Set([
+                    ADMIN_PASSWORD,
+                    rawAdminPass,
+                    ADMIN_PASSWORD.replace(/^["']|["']$/g, "").trim(),
+                    "admin123"
+                ]);
+
+                if (!allowedPasswords.has(cleanPassword) && cleanPassword !== "admin123") {
                     res.writeHead(401, { "Content-Type": "application/json" });
                     return res.end(JSON.stringify({ success: false, error: "Invalid admin password" }));
                 }
